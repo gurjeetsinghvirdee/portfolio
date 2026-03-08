@@ -28,7 +28,7 @@
     font-size: .65rem;
     letter-spacing: .16rem;
     text-transform: uppercase;
-    color: var(--text2);
+    color: var(--text);
     text-decoration: none;
     transition: color .2s;
 }
@@ -39,7 +39,7 @@
 
 .copy {
     font-size: .62rem;
-    color: var(--text3);
+    color: var(--text2);
     letter-spacing: .05em;
 }
 

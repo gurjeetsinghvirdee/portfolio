@@ -4,7 +4,8 @@ import styles from './Marquee.module.css';
 
 export function Marquee() {
     const items = [
-        'React.js', 'Next.js', 'TypeScript','Node.js', 'Scalable Systems', 'UI / UX', 'Performance First', 'AI Integration'
+        'System Design', 'UI / UX', 'Web Performance',  'Scalable Systems', 'AI Integration', 
+        'Data Visualization', 'Developer Experience', 'Product Engineering', 'API Architecture', 'Real-Time Systems', 'Interactive Graphics', 'Performance Engineering'
     ]
 
     return (

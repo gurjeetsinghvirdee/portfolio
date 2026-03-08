@@ -78,7 +78,7 @@
 
 .inner {
     position: relative;
-    aspect-ratio: 4/3;
+    aspect-ratio: 4 / 3.725 !important;
     overflow: hidden;
     width: 100%
 }
@@ -116,7 +116,7 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    padding: 32px;
+    padding: 24px 28px;
     background: linear-gradient(to top, rgba(8, 8, 7, .9) 0%, transparent 55%);
 }
 
@@ -162,25 +162,24 @@
     color: var(--accent);
     margin-bottom: 8px;
     transform: translateY(8px);
-    opacity: 0;
-    transition: transform .4s var(--ease), opacity .4s;
+    opacity: .7;
+    transition: translateY(0);
 }
 
 .card:hover .category {
-    transform: translate(0);
     opacity: 1;
 }
 
 .cardTitle {
     font-family: 'Instrument Serif', serif;
     font-weight: 400;
-    font-size: 1.6rem;
+    font-size: 1.9rem;
     color: #f0ece3;
     line-height: 1.2;
 }
 
 .featured .cardTitle {
-    font-size: 2.4rem;
+    font-size: 2.6rem;
 }
 
 .tags {
