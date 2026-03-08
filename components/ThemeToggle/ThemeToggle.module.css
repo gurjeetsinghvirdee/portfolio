@@ -1,0 +1,53 @@
+.btn {
+    position: fixed;
+    top: 28px;
+    right: 28px;
+    z-index: 200;
+    width: 52px;
+    height: 28px;
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    border-radius: 100px;
+    cursor: none;
+    transition: background .4s var(--ease), border-color .4s;
+    display: flex;
+    align-items: center;
+    padding: 3px;
+}
+
+.btn::after {
+    content: '';
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--accent);
+    transition: transform .4s var(--ease), background .4s;
+}
+
+[data-theme="light"] .btn::after {
+    transform: translateX(24px);
+}
+
+.icon {
+    position: absolute;
+    font-size: .7rem;
+    transition: opacity .3s;
+}
+
+.moon {
+    right: 8px;
+    opacity: 1;
+}
+
+.sun {
+    left: 8px;
+    opacity: 0;
+}
+
+[data-theme="light"] .moon {
+    opacity: 0;
+}
+
+[data-theme="light"] .sun {
+    opacity: 1;
+}

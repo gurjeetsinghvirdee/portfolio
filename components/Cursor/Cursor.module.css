@@ -1,0 +1,41 @@
+.cursor, .ring {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+    transform: translate(-50%, -50%);
+}
+
+.cursor {
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    transition: width .15s, height .15s, background .3s;
+}
+
+.ring {
+    width: 36px;
+    height: 36px;
+    border: 1.5px solid var(--accent);
+    opacity: .5;
+    transition: width .25s var(--ease), height .25s var(--ease), opacity .25s, border-color .3s;
+}
+
+body.cursor-hover .cursor {
+    width: 20px;
+    height: 20px;
+    background: var(--accent2);
+}
+
+body.cursor-hover .ring {
+    width: 56px;
+    height: 56px;
+    opacity: .25;
+}
+
+body.cursor-click .cursor {
+    width: 6px;
+    height: 6px;
+}

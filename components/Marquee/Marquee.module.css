@@ -1,0 +1,41 @@
+.wrap {
+    overflow: hidden;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 0;
+    background: var(--bg2);
+    transition: background .5s;
+}
+
+.track {
+    display: flex;
+    gap: 48px;
+    width: max-content;
+    animation: marquee 18s linear infinite;
+}
+
+.wrap:hover .track {
+    animation-play-state: paused;
+}
+
+.item {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--text2);
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 48px;
+    transition: color .25s;
+}
+
+.item:hover {
+    color: var(--accent);
+}
+
+.sep {
+    color: var(--accent);
+    font-size: .6rem;
+    font-style: normal;
+}

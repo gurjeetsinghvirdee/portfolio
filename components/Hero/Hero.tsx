@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import styles from './*.module.css';
+import styles from './Hero.module.css';
 
 export function Hero() {
     const line1Ref = useRef<HTMLDivElement>(null);
@@ -22,10 +22,10 @@ export function Hero() {
             }
         })
 
-        const wordEls = document.querySelectorAll(`.${styles.world}`)
+        const wordEls = document.querySelectorAll(`.${styles.word}`)
         wordEls.forEach((w, i) => {
             setTimeout(() => {
-                ;(w as HTMLElement).style.transition = 'opacity 0.7s var(--ease, transform 0.7s var(--ease)'
+                ;(w as HTMLElement).style.transition = 'opacity 0.7s var(--ease), transform 0.7s var(--ease)'
                 ;(w as HTMLElement).style.opacity = '1'
                 ;(w as HTMLElement).style.transform = 'translateY(0)'
             }, 400 + i * 140)
