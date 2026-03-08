@@ -49,11 +49,11 @@ export function Work() {
                         <div className={`${styles.inner} ${i === 0 ? styles.featured : ''}`}>
                             <div className={`${styles.bg} ${p.bgClass}`}></div>
                             <div className={styles.content}>
-                                <div className={styles.num}>
+                                <div className={styles.number}>
                                     {p.number}
                                 </div>
                                 <a href="#" className={styles.link}>↗</a>
-                                <div className={styles.cat}>
+                                <div className={styles.category}>
                                     {p.category}
                                 </div>
                                 <h3 className={styles.cardTitle}>

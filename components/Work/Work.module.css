@@ -117,7 +117,7 @@
     flex-direction: column;
     justify-content: flex-end;
     padding: 32px;
-    background: linear-gradient(to top, rgba(8, 8, 7, .9) 0% transparent 55%);
+    background: linear-gradient(to top, rgba(8, 8, 7, .9) 0%, transparent 55%);
 }
 
 .number {
