@@ -42,6 +42,20 @@
     position: relative;
     overflow: hidden;
     transition: background .5s;
+    box-shadow: 0 0 15px var(--silver-glow);
+    background: var(--gradient-gold);
+    background-clip: border-box;
+}
+
+.frame::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--mouse-x) var(--mouse-y), var(--silver-glow) 0%, transparent 70%);
+  mix-blend-mode: screen; /* Shiny overlay that gleams */
+  opacity: 0.6;
+  pointer-events: none;
+  transition: background 0.3s ease;
 }
 
 .frame::before {
@@ -58,7 +72,7 @@
     height: 100%;
     object-fit: cover;
     object-position: top;
-    transition: transform .7s var(--ease), filter .5s;
+    transition: filter 0.6s, transform .6s;
     filter: sepia(0.3) saturate(1.1);
 }
 
@@ -198,10 +212,13 @@
     }
 
     .grid {
-        grid-template-columns: 1fr;
+        display: flex;
+        flex-direction: column;
     }
 
     .visual {
-        display: none;
+        display: block;
+        width: 100%;
+        margin-bottom: 32px;
     }
 }

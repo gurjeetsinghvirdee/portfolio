@@ -176,6 +176,19 @@
     animation: breathe 2.5s ease-in-out infinite;
 }
 
+.gradientOverlay {
+    position: absolute;
+    inset: 0;
+    background: var(--gradient-glow);
+    mix-blend-mode: overlay;
+    pointer-events: none;
+    transition: background 0.3s ease;
+}
+
+.hero:hover .gradientOverlay {
+    background: radial-gradient(circle at var(--mouse-x) var(--mouse-y), rgba(212, 168, 83, 0.3) 0%, transparent 50%);
+}
+
 @media (max-width: 960px) {
     .hero {
         padding: 0 28px 60px;

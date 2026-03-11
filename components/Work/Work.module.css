@@ -150,6 +150,15 @@
     transition: opacity .35s var(--ease), transform .35s var(--ease);
 }
 
+.card:hover {
+    border-image: var(--gradient-gold) 1;
+    transition: var(--transition-all);
+}
+
+.card .bg {
+    filter: brightness(1.2) saturate(1.1);
+}
+
 .card:hover .link {
     opacity: 1;
     transform: scale(1);
