@@ -66,7 +66,7 @@ export function Hero() {
             active: false,
         };
 
-        const handleMouseMove = (e: MouseEvent) => {
+        const handlePointerMove = (e: PointerEvent) => {
             const cx = window.innerWidth / 2;
             const cy = window.innerHeight / 2;
             const dx = e.clientX - cx;
@@ -85,7 +85,7 @@ export function Hero() {
             pointer.active = true;
         };
 
-        const handleMouseLeave = () => {
+        const handlePointerEnd = () => {
             pointer.active = false;
         };
 
@@ -224,8 +224,11 @@ export function Hero() {
         };
 
         animateParticles();
-        window.addEventListener('mousemove', handleMouseMove, { passive: true });
-        window.addEventListener('mouseleave', handleMouseLeave);
+        window.addEventListener('pointermove', handlePointerMove, { passive: true });
+        window.addEventListener('pointerdown', handlePointerMove, { passive: true });
+        window.addEventListener('pointerup', handlePointerEnd);
+        window.addEventListener('pointercancel', handlePointerEnd);
+        window.addEventListener('pointerleave', handlePointerEnd);
         window.addEventListener('resize', setCanvasSize);
         mediaQuery.addEventListener('change', setCanvasSize);
 
@@ -241,8 +244,11 @@ export function Hero() {
 
         return () => {
             revealTimers.forEach(timer => window.clearTimeout(timer));
-            window.removeEventListener('mousemove', handleMouseMove);
-            window.removeEventListener('mouseleave', handleMouseLeave);
+            window.removeEventListener('pointermove', handlePointerMove);
+            window.removeEventListener('pointerdown', handlePointerMove);
+            window.removeEventListener('pointerup', handlePointerEnd);
+            window.removeEventListener('pointercancel', handlePointerEnd);
+            window.removeEventListener('pointerleave', handlePointerEnd);
             window.removeEventListener('resize', setCanvasSize);
             mediaQuery.removeEventListener('change', setCanvasSize);
             themeObserver.disconnect();
