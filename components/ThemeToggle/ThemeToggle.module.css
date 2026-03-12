@@ -1,18 +1,28 @@
 .btn {
-    position: fixed;
-    top: 22px;
-    right: 28px;
-    z-index: 200;
+    position: relative;
+    z-index: 2000;
     width: 52px;
     height: 28px;
     background: var(--bg3);
     border: 1px solid var(--border2);
     border-radius: 100px;
     cursor: none;
-    transition: background .4s var(--ease), border-color .4s;
+    transition: background .4s var(--ease), border-color .4s, opacity .25s var(--ease);
     display: flex;
     align-items: center;
     padding: 3px;
+    flex-shrink: 0;
+}
+
+[data-theme="light"] .btn {
+    background: rgba(242, 239, 232, 0.96);
+    border-color: rgba(160, 114, 42, 0.45);
+    box-shadow: 0 8px 18px rgba(26, 24, 20, 0.1);
+}
+
+:global(body.nav-menu-open) .btn {
+    opacity: 0;
+    pointer-events: none;
 }
 
 .btn::after {
@@ -50,4 +60,9 @@
 
 [data-theme="light"] .sun {
     opacity: 1;
+}
+
+[data-theme="light"] .moon,
+[data-theme="light"] .sun {
+    filter: contrast(1.12);
 }

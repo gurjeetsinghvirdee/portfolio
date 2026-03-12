@@ -207,6 +207,15 @@
     padding: 3px 9px;
 }
 
+.metrics {
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 0.75 rem;
+    color: var(--text2);
+}
+
 @media (max-width: 960px) {
     .section {
         padding: 80px 28px;

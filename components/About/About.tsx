@@ -12,14 +12,15 @@ const stats = [
 ];
 
 const skills = [
-    'React.js', 'Next.js', 'TypeScript', 'Node.js', 'Express.js','PostgreSQL', 'Prisma', 'Docker', 'Three.js', 'React Three Fiber','REST APIs', 'CI/CD', 'Figma', 'WebGL', 'LLM Integration'
+    'React.js', 'Next.js', 'TypeScript', 'Node.js', 'Express.js',
+    'PostgreSQL', 'Prisma', 'Docker', 'Three.js', 'React Three Fiber',
+    'REST APIs', 'CI/CD', 'Figma', 'WebGL', 'LLM Integration'
 ];
 
 export function About() {
     const sectionRef = useRef<HTMLElement>(null);
     const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
 
-    // Counter animation
     const animateValue = (el: HTMLElement | null, start: number, end: number, duration: number) => {
         if (!el) return;
         let startTimestamp: number | null = null;
@@ -64,22 +65,22 @@ export function About() {
             <div className={styles.eyebrow}>About</div>
 
             <div className={styles.grid}>
-                {/* Visual - Magnetic Frame */}
-                <motion.div 
+                <motion.div
                     className={styles.visual}
                     whileHover={{ scale: 1.015 }}
                     transition={{ type: "spring", stiffness: 300, damping: 25 }}
                 >
-                    <motion.div 
+                    <motion.div
                         className={styles.frame}
                         whileHover={{ scale: 1.03 }}
                         transition={{ type: "spring", stiffness: 400 }}
                     >
-                        <motion.img 
-                            src='/about.png' 
-                            alt='Gurjeet' 
+                        <motion.img
+                            src='/about.png'
+                            alt='Gurjeet'
                             className={styles.image}
-                            initial={{ filter: 'grayscale(0.6) contrast(0.95)' }}
+                            initial={{ scale: 0.95, filter: 'grayscale(0.6) contrast(0.95)' }}
+                            whileInView={{ scale: 1 }}
                             whileHover={{ filter: 'grayscale(0) contrast(1.1)' }}
                             transition={{ duration: 0.6 }}
                         />
@@ -90,9 +91,8 @@ export function About() {
                     <div className={styles.corner2}></div>
                 </motion.div>
 
-                {/* Content */}
                 <div className={styles.content}>
-                    <motion.h2 
+                    <motion.h2
                         className={styles.title}
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -101,25 +101,24 @@ export function About() {
                         I build things<br />that <em>last.</em>
                     </motion.h2>
 
-                    <motion.p 
+                    <motion.p
                         className={styles.text}
                         initial={{ opacity: 0 }}
                         whileInView={{ opacity: 1 }}
                         transition={{ delay: 0.4 }}
                     >
-                        I'm <strong>Gurjeet</strong> - a Frontend-Heavy Full Stack Engineer obsessed with performance, craft, and clarity. 
+                        I'm <strong>Gurjeet</strong> - a Frontend-Heavy Full Stack Engineer obsessed with performance, craft, and clarity.
                         I turn complex problems into scalable, elegant web systems that users love and teams can maintain.
-                        <br/><br />
-                        My work lives at the intersection of engineering rigor and design precision. Every line of code I write is intentional. 
+                        <br /><br />
+                        My work lives at the intersection of engineering rigor and design precision. Every line of code I write is intentional.
                         Every interface I build respects the user's time.
                     </motion.p>
 
-                    {/* Stats with counter */}
                     <div className={styles.statsGrid}>
                         {stats.map((s, i) => (
-                            <motion.div 
-                                key={i} 
-                                className={styles.stat} 
+                            <motion.div
+                                key={i}
+                                className={styles.stat}
                                 data-cursor-hover
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
@@ -134,17 +133,16 @@ export function About() {
                         ))}
                     </div>
 
-                    {/* Skills chips - staggered pop */}
                     <div className={styles.chips}>
                         {skills.map((skill, i) => (
-                            <motion.span 
-                                key={i} 
-                                className={styles.chip} 
+                            <motion.span
+                                key={i}
+                                className={styles.chip}
                                 data-cursor-hover
                                 initial={{ opacity: 0, scale: 0.8, y: 10 }}
                                 whileInView={{ opacity: 1, scale: 1, y: 0 }}
                                 transition={{ delay: 0.7 + i * 0.03 }}
-                                whileHover={{ y: -4, backgroundColor: 'var(--silver-glow)' }}
+                                whileHover={{ y: -4, backgroundColor: 'var(--accent)', color: 'var(--bg)', borderColor: 'var(--accent)' }}
                             >
                                 {skill}
                             </motion.span>

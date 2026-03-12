@@ -8,9 +8,21 @@ export function Cursor() {
   const cursorRef = useRef<HTMLDivElement>(null)
   const ringRef = useRef<HTMLDivElement>(null)
   const [isHover, setIsHover] = useState(false)
+  const [enabled, setEnabled] = useState(false)
 
   useEffect(() => {
-    let mx = 0, my = 0, rx = 0, ry = 0
+    const canUseCustomCursor = window.matchMedia('(pointer: fine)').matches
+    setEnabled(canUseCustomCursor)
+
+    if (!canUseCustomCursor) {
+      return
+    }
+
+    let mx = window.innerWidth / 2
+    let my = window.innerHeight / 2
+    let rx = mx
+    let ry = my
+    let frameId = 0
 
     const handleMouseMove = (e: MouseEvent) => {
       mx = e.clientX
@@ -34,7 +46,7 @@ export function Cursor() {
         ringRef.current.style.left = rx + 'px'
         ringRef.current.style.top = ry + 'px'
       }
-      requestAnimationFrame(animate)
+      frameId = requestAnimationFrame(animate)
     }
     animate()
 
@@ -62,8 +74,15 @@ export function Cursor() {
         el.removeEventListener('mouseenter', addHoverClass)
         el.removeEventListener('mouseleave', removeHoverClass)
       })
+      cancelAnimationFrame(frameId)
+      document.body.classList.remove('cursor-hover')
+      document.body.classList.remove('cursor-click')
     }
   }, [])
+
+  if (!enabled) {
+    return null
+  }
 
   return (
     <>

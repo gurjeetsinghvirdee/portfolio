@@ -214,11 +214,18 @@
     .grid {
         display: flex;
         flex-direction: column;
+        gap: 48px;
     }
 
     .visual {
         display: block;
+        aspect-ratio: auto;
+        heighT: auto;
         width: 100%;
-        margin-bottom: 32px;
+        margin: 0 auto;
+    }
+
+    .content {
+        max-width: 100%;
     }
 }
