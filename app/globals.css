@@ -12,7 +12,7 @@
   --ease-out: cubic-bezier(0,0,.2,1);
   --dur: .7s;
 
-  /* Premium metallic gradients  */
+  /* Premium metallic gradients */
   --gradient-gold: linear-gradient(135deg, #ffd700 0%, #d4a853 50%, #aa8c2e 100%);
   --gradient-silver: linear-gradient(135deg, #f5f5f5 0%, #c0c0c0 50%, #8c8c8c 100%);
   --gradient-platinum: linear-gradient(135deg, #ffffff 0%, #e5e5e5 50%, #b8b8b8 100%);
@@ -37,6 +37,15 @@
 
   --transition-all: all 0.7s cubic(0.16, 1, 0.3, 1);
   --nav-height: 80px;
+
+  /* Typography scaling for hierarchy */
+  --font-size-base: clamp(14px, 1.5vw, 16px);
+  --font-size-lg: calc(var(--font-size-base) * 2.25);  /* For h1 */
+  --font-size-md: calc(var(--font-size-base) * 1.5);   /* For h2/subheadings */
+  --font-size-sm: calc(var(--font-size-base) * 0.85);  /* For captions */
+  --font-weight-bold: 700;  /* From Syne family */
+  --font-weight-medium: 500;
+  --font-weight-light: 300;
 }
 
 [data-theme="dark"] {
@@ -44,9 +53,9 @@
   --bg2: #0e0e0c;
   --bg3: #141412;
   --text: #f0ece3;
-  --text2: rgba(240,236,227,.62);
-  --text3: rgba(240,236,227,.34);
-  --accent: #d4a853;
+  --text2: rgba(240,236,227,0.78);  /* Increased for better contrast */
+  --text3: rgba(240,236,227,0.50);  /* Increased for better contrast */
+  --accent: #e8c97a;  /* Slightly brighter for pop */
   --accent2: #e8c97a;
   --border: rgba(240,236,227,.07);
   --border2: rgba(212,168,83,.25);
@@ -62,9 +71,9 @@
   --bg2: #f2efe8;
   --bg3: #e8e3d8;
   --text: #1a1814;
-  --text2: rgba(26,24,20,0.78);
-  --text3: rgba(26,24,20,.4);
-  --accent: #a0722a;
+  --text2: rgba(26,24,20,0.85);  /* Increased for better contrast */
+  --text3: rgba(26,24,20,0.55);  /* Increased for better contrast */
+  --accent: #8c5e1e;  /* Darker for higher contrast */
   --accent2: #c48d3a;
   --border: rgba(26,24,20,.1);
   --border2: rgba(160,114,42,.28);
@@ -103,7 +112,7 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: 'JetBrains Mono', monospace;
-  font-size: clamp(14px, 1.5vw, 16px);
+  font-size: var(--font-size-base);
   font-weight: 300;
   overflow-x: hidden;
   cursor: default;
@@ -126,6 +135,11 @@ body {
 section {
   position: relative;
   z-index: 1;
+  padding: clamp(80px, 10vw, 120px) clamp(40px, 5vw, 80px);  /* Enhanced for hierarchy */
+  margin: 0 auto;
+  max-width: 1440px;  /* Container for centered content */
+  animation: fadeUp 1s var(--ease) forwards;
+  opacity: 0;  /* Start hidden for entrance */
 }
 
 @keyframes fadeUp {
@@ -147,11 +161,163 @@ section {
   to { transform: translateX(-50%); }
 }
 
+/* Typography for visual hierarchy */
+h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: 1.5em;
+  letter-spacing: -0.02em;  /* Subtle compression for premium density */
+  line-height: 1.1;  /* Tighter for mobile */
+}
+
+h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  margin-bottom: 1em;
+}
+
+p {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-light);
+  line-height: 1.6;  /* Improved readability */
+}
+
+/* Grid for layout hierarchy */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: clamp(20px, 3vw, 40px);  /* Dynamic gaps for breathing room */
+}
+
+/* Overlay for improved contrast */
+.overlay-text {
+  position: relative;
+  z-index: 1;
+}
+
+.overlay-text::before {
+  content: '';
+  position: absolute;
+  top: -10%; bottom: -10%; left: -5%; right: -5%;
+  background: rgba(var(--bg), 0.15);  /* Semi-transparent scrim */
+  z-index: -1;
+  border-radius: 8px;
+}
+
+/* Premium element enhancements */
+.premium-element {
+  background: var(--gradient-gold);  /* Or silver/platinum based on context */
+  box-shadow: var(--glass-shadow);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(12px);  /* Enhanced glassmorphism */
+  transition: transform 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out);
+}
+
+.premium-element:hover {
+  transform: translateY(-4px);  /* Lift effect for engagement */
+  box-shadow: 0 12px 48px var(--shadow);
+}
+
+/* Component-specific styles (adapt to module.css as needed) */
+.header {
+  padding: 20px;
+  text-align: center;
+}
+
+.terminal {
+  margin: 20px auto;
+  max-width: 90%;  /* Prevent overflow on mobile */
+  border-radius: 8px;
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;  /* Allow wrapping on small screens */
+  justify-content: center;
+  gap: 10px;
+  padding: 10px 0;
+  overflow-x: auto;  /* Horizontal scroll if needed */
+}
+
+.project-card {
+  position: relative;
+  margin-bottom: 20px;
+  padding: 20px;
+  border-radius: 8px;
+  height: auto;  /* Fluid height */
+}
+
+.project-card::before {
+  content: attr(data-number);  /* For numbers like '01' */
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  opacity: 0.5;
+}
+
+.about-photo {
+  max-width: 100%;
+  height: auto;
+  border: 4px solid var(--accent);
+  border-radius: 8px;
+  margin: 20px auto;
+  display: block;
+}
+
+.footer {
+  padding: 40px 20px;
+  text-align: center;
+}
+
+/* Enhanced media queries for mobile fixes */
 @media (max-width: 768px) {
   section {
     padding: 60px 20px;
   }
+  
   .grid {
     grid-template-columns: 1fr;
+  }
+  
+  h1 {
+    font-size: calc(var(--font-size-lg) * 0.8);  /* Scale down for mobile */
+  }
+  
+  h2 {
+    font-size: calc(var(--font-size-md) * 0.9);
+  }
+  
+  .nav {
+    flex-direction: column;  /* Stack vertically if space is tight */
+    align-items: center;
+  }
+  
+  .project-card {
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+  
+  .about-photo {
+    max-width: 80%;  /* Smaller on very narrow screens */
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --font-size-base: clamp(12px, 3.5vw, 14px);  /* Further reduce base font */
+  }
+  
+  section {
+    padding: 40px 15px;  /* Tighter padding for smallest devices */
+  }
+  
+  .terminal {
+    font-size: 0.9em;  /* Scale terminal text */
+  }
+  
+  .footer {
+    padding: 20px 15px;
   }
 }
