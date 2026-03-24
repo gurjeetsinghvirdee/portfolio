@@ -373,8 +373,8 @@
 }
 
 [data-theme="light"] .particles {
-  mix-blend-mode: multiply;
-  opacity: 0.45;
+    mix-blend-mode: multiply;
+    opacity: 0.45;
 }
 
 .signalPanel {

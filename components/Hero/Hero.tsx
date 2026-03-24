@@ -89,7 +89,6 @@ export function Hero() {
             pointer.active = false;
         };
 
-        // Premium Particle System (Gold + Silver Mix)
         const canvas = particleRef.current;
         if (!canvas) return;
         const ctx = canvas.getContext('2d');
@@ -100,11 +99,9 @@ export function Hero() {
         let connectionColor = 'rgba(212, 168, 83, 0.12)';
 
         const createParticle = (width: number, height: number, isMobile: boolean): Particle => {
-            // CHANGED: Full width distribution
             const baseX = width * Math.random();
             const baseY = height * (0.2 + Math.random() * 0.6);
 
-            // Bright gold in dark mode, dark silver in light mode
             const theme = document.documentElement.getAttribute('data-theme');
 
             let particleColor: string;
