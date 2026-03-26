@@ -31,18 +31,18 @@ export function StatusCard() {
 
                 <div className={styles.stats}>
                     <div className={styles.stat}>
-                        <span className={styles.startValue}>40+</span>
-                        <span className={styles.startLabel}>Projects</span>
+                        <span className={styles.statValue}>40+</span>
+                        <span className={styles.statLabel}>Projects</span>
                     </div>
 
                     <div className={styles.stat}>
-                        <span className={styles.startValue}>5yr</span>
-                        <span className={styles.startLabel}>Experience</span>
+                        <span className={styles.statValue}>5yr</span>
+                        <span className={styles.statLabel}>Experience</span>
                     </div>
 
                     <div className={styles.stat}>
-                        <span className={styles.startValue}>92%</span>
-                        <span className={styles.startLabel}>Satisfaction</span>
+                        <span className={styles.statValue}>92%</span>
+                        <span className={styles.statLabel}>Satisfaction</span>
                     </div>
                 </div>
 

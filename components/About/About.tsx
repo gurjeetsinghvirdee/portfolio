@@ -1,148 +1,132 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { motion } from 'framer-motion';
 import styles from './About.module.css';
 
 const stats = [
-    { value: 35, suffix: '+', label: 'Projects Shipped' },
-    { value: 92, suffix: '%', label: 'Client Satisfaction' },
-    { value: 5, suffix: 'yr', label: 'Experience' },
-    { value: '∞', suffix: '', label: 'Coffee Consumed' },
+    { value: '40+', label: 'Projects Shipped' },
+    { value: '92%', label: 'Client Satisfaction' },
+    { value: '5', label: 'Years Experience' },
+    { value: '∞', label: 'Cups of Coffee' },
 ];
 
 const skills = [
-    'React.js', 'Next.js', 'TypeScript', 'Node.js', 'Express.js',
-    'PostgreSQL', 'Prisma', 'Docker', 'Three.js', 'React Three Fiber',
-    'REST APIs', 'CI/CD', 'Figma', 'WebGL', 'LLM Integration'
+    'React', 'Next.js', 'TypeScript', 'Node.js', 'PostgreSQL',
+    'Framer Motion', 'Three.js', 'Tailwind', 'Docker', 'AI Integration'
 ];
 
 export function About() {
     const sectionRef = useRef<HTMLElement>(null);
-    const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
-
-    const animateValue = (el: HTMLElement | null, start: number, end: number, duration: number) => {
-        if (!el) return;
-        let startTimestamp: number | null = null;
-        const step = (timestamp: number) => {
-            if (!startTimestamp) startTimestamp = timestamp;
-            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-            const value = Math.floor(progress * (end - start) + start);
-            el.textContent = value.toString();
-            if (progress < 1) {
-                window.requestAnimationFrame(step);
-            } else {
-                el.textContent = end.toString();
-            }
-        };
-        window.requestAnimationFrame(step);
-    };
 
     useEffect(() => {
-        if (!isInView) return;
+        const section = sectionRef.current;
+        if (!section) {
+            return;
+        }
 
-        const statValues = document.querySelectorAll(`.${styles.statValue}`);
-        statValues.forEach((el, i) => {
-            const stat = stats[i];
-            if (typeof stat.value === 'number') {
-                setTimeout(() => {
-                    animateValue(el as HTMLElement, 0, stat.value as number, 1800);
-                }, i * 200);
-            }
-        });
-    }, [isInView]);
+        let rafId = 0;
+        let currentX = window.innerWidth * 0.5;
+        let currentY = window.innerHeight * 0.35;
+        let targetX = currentX;
+        let targetY = currentY;
+
+        const paint = () => {
+            currentX += (targetX - currentX) * 0.14;
+            currentY += (targetY - currentY) * 0.14;
+            section.style.setProperty('--about-mouse-x', `${currentX}px`);
+            section.style.setProperty('--about-mouse-y', `${currentY}px`);
+            rafId = requestAnimationFrame(paint);
+        };
+
+        const onMove = (event: MouseEvent) => {
+            targetX = event.clientX;
+            targetY = event.clientY;
+        };
+
+        const onLeave = () => {
+            targetX = window.innerWidth * 0.5;
+            targetY = window.innerHeight * 0.35;
+        };
+
+        section.style.setProperty('--about-mouse-x', `${currentX}px`);
+        section.style.setProperty('--about-mouse-y', `${currentY}px`);
+        window.addEventListener('mousemove', onMove, { passive: true });
+        section.addEventListener('mouseleave', onLeave);
+        rafId = requestAnimationFrame(paint);
+
+        return () => {
+            cancelAnimationFrame(rafId);
+            window.removeEventListener('mousemove', onMove);
+            section.removeEventListener('mouseleave', onLeave);
+        };
+    }, []);
 
     return (
-        <motion.section
-            id="about"
-            className={styles.section}
-            ref={sectionRef}
-            initial={{ opacity: 0, y: 60 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-        >
+        <section id="about" className={styles.section} ref={sectionRef}>
+            <div className={styles.waterBg} aria-hidden>
+                <div className={styles.waterBlobA} />
+                <div className={styles.waterBlobB} />
+                <div className={styles.waterBlobC} />
+                <div className={styles.cursorRipple} />
+            </div>
+
             <div className={styles.eyebrow}>About</div>
 
             <div className={styles.grid}>
-                <motion.div
+                {/* Visual */}
+                <motion.div 
                     className={styles.visual}
-                    whileHover={{ scale: 1.015 }}
-                    transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                    whileHover={{ scale: 1.02 }}
+                    transition={{ type: "spring", stiffness: 280 }}
                 >
-                    <motion.div
-                        className={styles.frame}
-                        whileHover={{ scale: 1.03 }}
-                        transition={{ type: "spring", stiffness: 400 }}
-                    >
-                        <motion.img
-                            src='/about.png'
-                            alt='Gurjeet'
+                    <div className={styles.frame}>
+                        <img 
+                            src="/about.png" 
+                            alt="Gurjeet Singh" 
                             className={styles.image}
-                            initial={{ scale: 0.95, filter: 'grayscale(0.6) contrast(0.95)' }}
-                            whileInView={{ scale: 1 }}
-                            whileHover={{ filter: 'grayscale(0) contrast(1.1)' }}
-                            transition={{ duration: 0.6 }}
                         />
-                        <div className={styles.tag}>📍 Available Worldwide</div>
-                    </motion.div>
-
-                    <div className={styles.corner}></div>
-                    <div className={styles.corner2}></div>
+                        <div className={styles.tag}>Available Worldwide</div>
+                    </div>
                 </motion.div>
 
+                {/* Narrative */}
                 <div className={styles.content}>
-                    <motion.h2
-                        className={styles.title}
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.2 }}
-                    >
+                    <h2 className={styles.title}>
                         I build things<br />that <em>last.</em>
-                    </motion.h2>
+                    </h2>
 
-                    <motion.p
-                        className={styles.text}
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        transition={{ delay: 0.4 }}
-                    >
-                        I'm <strong>Gurjeet</strong> - a Frontend-Heavy Full Stack Engineer obsessed with performance, craft, and clarity.
-                        I turn complex problems into scalable, elegant web systems that users love and teams can maintain.
-                        <br /><br />
-                        My work lives at the intersection of engineering rigor and design precision. Every line of code I write is intentional.
-                        Every interface I build respects the user's time.
-                    </motion.p>
+                    <p className={styles.text}>
+                        I'm Gurjeet - a frontend-heavy full stack engineer who believes in quiet excellence. 
+                        I turn complex technical challenges into elegant, maintainable digital products that users trust instantly and teams love to work with.
+                    </p>
 
                     <div className={styles.statsGrid}>
-                        {stats.map((s, i) => (
-                            <motion.div
-                                key={i}
+                        {stats.map((stat, i) => (
+                            <motion.div 
+                                key={i} 
                                 className={styles.stat}
-                                data-cursor-hover
-                                initial={{ opacity: 0, y: 20 }}
+                                initial={{ opacity: 0, y: 30 }}
                                 whileInView={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.5 + i * 0.1 }}
+                                transition={{ delay: i * 0.1 }}
+                                data-cursor-hover
                             >
-                                <div className={styles.statValue}>
-                                    {typeof s.value === 'number' ? '0' : s.value}
-                                    {s.suffix}
-                                </div>
-                                <div className={styles.statLabel}>{s.label}</div>
+                                <div className={styles.statValue}>{stat.value}</div>
+                                <div className={styles.statLabel}>{stat.label}</div>
                             </motion.div>
                         ))}
                     </div>
 
-                    <div className={styles.chips}>
+                    <div className={styles.skills}>
                         {skills.map((skill, i) => (
-                            <motion.span
+                            <motion.span 
                                 key={i}
-                                className={styles.chip}
+                                className={styles.skill}
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                whileInView={{ opacity: 1, scale: 1 }}
+                                transition={{ delay: 0.4 + i * 0.04 }}
+                                whileHover={{ y: -3, backgroundColor: 'var(--accent)', color: 'var(--bg)' }}
                                 data-cursor-hover
-                                initial={{ opacity: 0, scale: 0.8, y: 10 }}
-                                whileInView={{ opacity: 1, scale: 1, y: 0 }}
-                                transition={{ delay: 0.7 + i * 0.03 }}
-                                whileHover={{ y: -4, backgroundColor: 'var(--accent)', color: 'var(--bg)', borderColor: 'var(--accent)' }}
                             >
                                 {skill}
                             </motion.span>
@@ -150,6 +134,6 @@ export function About() {
                     </div>
                 </div>
             </div>
-        </motion.section>
+        </section>
     );
 }

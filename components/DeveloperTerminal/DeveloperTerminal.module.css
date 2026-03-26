@@ -1,6 +1,6 @@
 .terminal {
     width: 100%;
-    height: clamp(340px, 56vh, 620px);
+    height: clamp(340px, 54vh, 580px);
     border-radius: 16px;
     overflow: hidden;
     border: 1px solid color-mix(in srgb, var(--border) 55%, var(--accent));
@@ -8,8 +8,8 @@
     box-shadow: 0 24px 56px var(--shadow);
     display: flex;
     flex-direction: column;
-    margin-bottom: 16px;
-    padding-bottom: 20px;
+    margin-bottom: 8px;
+    padding-bottom: 10px;
 }
 
 .topBar {
@@ -57,11 +57,11 @@
 
 .screen {
     flex: 1;
-    padding: 18px 16px;
+    padding: 16px 16px 12px;
     display: flex;
     flex-direction: column;
     gap: 8px;
-    font-size: 0.72rem;
+    font-size: 0.74rem;
     line-height: 1.6;
     overflow-y: auto;
     overflow-x: hidden;
@@ -106,7 +106,7 @@
     font-size: inherit;
     line-height: inherit;
     outline: none;
-    caret-color: transparent;
+    caret-color: var(--accent);
     width: 100%;
     padding-left: 8px;
 }
@@ -117,46 +117,6 @@
     min-width: 0;
 }
 
-.inputMirror {
-    position: absolute;
-    left: 0;
-    top: 0;
-    visibility: hidden;
-    pointer-events: none;
-    white-space: pre;
-    font-family: inherit;
-    font-size: inherit;
-    line-height: inherit;
-    letter-spacing: inherit;
-    color: color-mix(in srgb, var(--accent) 94%, #ffefc2);
-    padding: 0;
-    padding-left: 2px;
-}
-
-.blinkCursor {
-    position: absolute;
-    top: 50%;
-    transform: translate(-1px, -52%);
-    width: 2px;
-    height: 1.05em;
-    border-radius: 0;
-    background: color-mix(in srgb, var(--accent) 96%, #ffefc2);
-    animation: terminal-cursor-blink 1s steps(1, end) infinite;
-    pointer-events: none;
-}
-
-@keyframes terminal-cursor-blink {
-    0%,
-    49% {
-        opacity: 1;
-    }
-
-    50%,
-    100% {
-        opacity: 0;
-    }
-}
-
 .input::placeholder {
     color: color-mix(in srgb, var(--accent) 68%, #e2c58a);
     opacity: 0.6;
@@ -164,47 +124,40 @@
 
 /* Light theme */
 [data-theme="light"] .terminal {
-    background: linear-gradient(180deg, color-mix(in srgb, var(--bg2) 95%, #1a1a1a) 0%, color-mix(in srgb, var(--bg) 92%, #0f0f0f) 100%);
-    border-color: color-mix(in srgb, var(--border) 62%, var(--accent));
+    background: linear-gradient(180deg, #f8f2e7 0%, #f1e7d6 100%);
+    border-color: rgba(120, 82, 29, 0.26);
+    box-shadow: 0 14px 36px rgba(84, 55, 18, 0.14);
 }
 
 [data-theme="light"] .topBar {
-    background: color-mix(in srgb, var(--bg3) 85%, #1c1c1c);
-    border-bottom-color: rgba(26, 24, 20, 0.15);
+    background: rgba(235, 220, 196, 0.8);
+    border-bottom-color: rgba(92, 62, 22, 0.22);
 }
 
 [data-theme="light"] .title {
-    color: color-mix(in srgb, var(--accent) 90%, #ffe7ad);
+    color: #7d5220;
 }
 
 [data-theme="light"] .rowText {
-    color: color-mix(in srgb, var(--accent) 86%, #ffdf99);
+    color: #7d5423;
 }
 
 [data-theme="light"] .promptRow .rowText,
 [data-theme="light"] .inputRow .rowText {
-    color: color-mix(in srgb, var(--accent) 94%, #ffefc2);
+    color: #67421a;
 }
 
 [data-theme="light"] .outputRow .rowText {
-    color: color-mix(in srgb, var(--accent) 86%, #ffdf99);
+    color: #7d5423;
 }
 
 [data-theme="light"] .input {
-    color: color-mix(in srgb, var(--accent) 94%, #ffefc2);
-    caret-color: transparent;
-}
-
-[data-theme="light"] .inputMirror {
-    color: color-mix(in srgb, var(--accent) 94%, #ffefc2);
-}
-
-[data-theme="light"] .blinkCursor {
-    background: color-mix(in srgb, var(--accent) 96%, #ffefc2);
+    color: #5f3b16;
+    caret-color: #5f3b16;
 }
 
 [data-theme="light"] .input::placeholder {
-    color: color-mix(in srgb, var(--accent) 68%, #e2c58a);
+    color: rgba(95, 59, 22, 0.5);
 }
 
 @media (max-width: 960px) {

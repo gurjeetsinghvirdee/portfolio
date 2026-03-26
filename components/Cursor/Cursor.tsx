@@ -1,103 +1,83 @@
-'use client'
+'use client';
 
-import { useEffect, useRef, useState } from 'react'
-import { motion } from 'framer-motion'
-import styles from './Cursor.module.css'
+import { useEffect, useRef, useState } from 'react';
+import styles from './Cursor.module.css';
 
 export function Cursor() {
-  const cursorRef = useRef<HTMLDivElement>(null)
-  const ringRef = useRef<HTMLDivElement>(null)
-  const [isHover, setIsHover] = useState(false)
-  const [enabled, setEnabled] = useState(false)
+    const cursorRef = useRef<HTMLDivElement>(null);
+    const ringRef = useRef<HTMLDivElement>(null);
+    const [isHover, setIsHover] = useState(false);
+    const [isClick, setIsClick] = useState(false);
 
-  useEffect(() => {
-    const canUseCustomCursor = window.matchMedia('(pointer: fine)').matches
-    setEnabled(canUseCustomCursor)
+    useEffect(() => {
+        const canUseCustomCursor = window.matchMedia('(pointer: fine)').matches;
+        if (!canUseCustomCursor) return;
 
-    if (!canUseCustomCursor) {
-      return
-    }
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+        let cursorX = mouseX;
+        let cursorY = mouseY;
 
-    let mx = window.innerWidth / 2
-    let my = window.innerHeight / 2
-    let rx = mx
-    let ry = my
-    let frameId = 0
+        let rafId: number;
 
-    const handleMouseMove = (e: MouseEvent) => {
-      mx = e.clientX
-      my = e.clientY
-    }
+        const handleMouseMove = (e: MouseEvent) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        };
 
-    const handleMouseDown = () => document.body.classList.add('cursor-click')
-    const handleMouseUp = () => document.body.classList.remove('cursor-click')
+        const handleMouseDown = () => setIsClick(true);
+        const handleMouseUp = () => setIsClick(false);
 
-    document.addEventListener('mousemove', handleMouseMove)
-    document.addEventListener('mousedown', handleMouseDown)
-    document.addEventListener('mouseup', handleMouseUp)
+        const animate = () => {
+            if (cursorRef.current && ringRef.current) {
+                // Smooth follow with spring-like easing
+                cursorX += (mouseX - cursorX) * 0.22;
+                cursorY += (mouseY - cursorY) * 0.22;
 
-    const animate = () => {
-      if (cursorRef.current && ringRef.current) {
-        cursorRef.current.style.left = mx + 'px'
-        cursorRef.current.style.top = my + 'px'
+                cursorRef.current.style.transform = `translate(-50%, -50%) translate(${cursorX}px, ${cursorY}px)`;
+                ringRef.current.style.transform = `translate(-50%, -50%) translate(${cursorX}px, ${cursorY}px)`;
+            }
+            rafId = requestAnimationFrame(animate);
+        };
 
-        rx += (mx - rx) * 0.1
-        ry += (my - ry) * 0.1
-        ringRef.current.style.left = rx + 'px'
-        ringRef.current.style.top = ry + 'px'
-      }
-      frameId = requestAnimationFrame(animate)
-    }
-    animate()
+        animate();
 
-    // Hover effects
-    const addHoverClass = () => {
-      document.body.classList.add('cursor-hover')
-      setIsHover(true)
-    }
-    const removeHoverClass = () => {
-      document.body.classList.remove('cursor-hover')
-      setIsHover(false)
-    }
+        // Hover detection
+        const addHover = () => setIsHover(true);
+        const removeHover = () => setIsHover(false);
 
-    const interactiveElements = document.querySelectorAll('a, button, [data-cursor-hover]')
-    interactiveElements.forEach(el => {
-      el.addEventListener('mouseenter', addHoverClass)
-      el.addEventListener('mouseleave', removeHoverClass)
-    })
+        const interactiveEls = document.querySelectorAll('a, button, [data-cursor-hover]');
+        interactiveEls.forEach(el => {
+            el.addEventListener('mouseenter', addHover);
+            el.addEventListener('mouseleave', removeHover);
+        });
 
-    return () => {
-      document.removeEventListener('mousemove', handleMouseMove)
-      document.removeEventListener('mousedown', handleMouseDown)
-      document.removeEventListener('mouseup', handleMouseUp)
-      interactiveElements.forEach(el => {
-        el.removeEventListener('mouseenter', addHoverClass)
-        el.removeEventListener('mouseleave', removeHoverClass)
-      })
-      cancelAnimationFrame(frameId)
-      document.body.classList.remove('cursor-hover')
-      document.body.classList.remove('cursor-click')
-    }
-  }, [])
+        document.addEventListener('mousemove', handleMouseMove, { passive: true });
+        document.addEventListener('mousedown', handleMouseDown);
+        document.addEventListener('mouseup', handleMouseUp);
 
-  if (!enabled) {
-    return null
-  }
+        return () => {
+            cancelAnimationFrame(rafId);
+            document.removeEventListener('mousemove', handleMouseMove);
+            document.removeEventListener('mousedown', handleMouseDown);
+            document.removeEventListener('mouseup', handleMouseUp);
+            interactiveEls.forEach(el => {
+                el.removeEventListener('mouseenter', addHover);
+                el.removeEventListener('mouseleave', removeHover);
+            });
+        };
+    }, []);
 
-  return (
-    <>
-      <motion.div 
-        ref={cursorRef} 
-        className={styles.cursor}
-        animate={{ scale: isHover ? 2.5 : 1 }}
-        transition={{ duration: 0.2 }}
-      />
-      <motion.div 
-        ref={ringRef} 
-        className={styles.ring}
-        animate={{ scale: isHover ? 1.4 : 1 }}
-        transition={{ duration: 0.3 }}
-      />
-    </>
-  )
+    return (
+        <>
+            <div 
+                ref={cursorRef} 
+                className={`${styles.cursor} ${isHover ? styles.hover : ''} ${isClick ? styles.click : ''}`}
+            />
+            <div 
+                ref={ringRef} 
+                className={`${styles.ring} ${isHover ? styles.hover : ''}`}
+            />
+        </>
+    );
 }
