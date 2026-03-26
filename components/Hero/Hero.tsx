@@ -3,6 +3,8 @@
 import { useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { DeveloperTerminal } from '@/components/DeveloperTerminal/DeveloperTerminal';
+import { StatusCard } from '../StatusCard/StatusCard';
+import { FloatingCards } from '../FloatingCards/FloatingCards';
 import styles from './Hero.module.css';
 
 type Particle = {
@@ -29,7 +31,12 @@ export function Hero() {
     const y1 = useTransform(scrollY, [0, 500], [0, -50]);
     const y2 = useTransform(scrollY, [0, 500], [0, -100]);
 
-    const proofChips = ['Next.js product builds', 'TypeScript systems', 'AI-powered workflows', 'Design-engineering craft'];
+    const proofChips = [
+        'Next.js product builds', 
+        'TypeScript systems', 
+        'AI-powered workflows', 
+        'Design-engineering craft'
+    ];
 
     useEffect(() => {
         const revealTimers: number[] = [];
@@ -61,8 +68,8 @@ export function Hero() {
         // Parallax layers
         const layers = Array.from(document.querySelectorAll('[data-speed]')) as HTMLElement[];
         const pointer = {
-            x: window.innerWidth * 0.78,
-            y: window.innerHeight * 0.45,
+            x: window.innerWidth * 0.5,
+            y: window.innerHeight * 0.5,
             active: false,
         };
 
@@ -89,6 +96,7 @@ export function Hero() {
             pointer.active = false;
         };
 
+        // Premium Particle System
         const canvas = particleRef.current;
         if (!canvas) return;
         const ctx = canvas.getContext('2d');
@@ -99,16 +107,23 @@ export function Hero() {
         let connectionColor = 'rgba(212, 168, 83, 0.12)';
 
         const createParticle = (width: number, height: number, isMobile: boolean): Particle => {
+            // Full width distribution
             const baseX = width * Math.random();
             const baseY = height * (0.2 + Math.random() * 0.6);
 
+            // Premium metallic mix: 60% gold, 40% silver
+            const isSilver = Math.random() > 0.6;
             const theme = document.documentElement.getAttribute('data-theme');
 
             let particleColor: string;
             if (theme === 'light') {
-                particleColor = 'rgba(110, 110, 110, 0.75)';
+                particleColor = isSilver
+                    ? 'rgba(140, 140, 140, 0.85)'
+                    : 'rgba(160, 114, 42, 0.88)';
             } else {
-                particleColor = 'rgba(255, 215, 0, 0.85)';
+                particleColor = isSilver
+                    ? 'rgba(192, 192, 192, 0.82)'
+                    : 'rgba(212, 168, 83, 0.88)';
             }
 
             return {
@@ -129,14 +144,16 @@ export function Hero() {
         const resolveConnectionColor = () => {
             const theme = document.documentElement.getAttribute('data-theme');
             connectionColor = theme === 'light'
-                ? 'rgba(148, 163, 184, 0.26)'
-                : 'rgba(255, 215, 0, 0.15)';
+                ? 'rgba(160, 114, 42, 0.14)'
+                : 'rgba(212, 168, 83, 0.12)';
         };
 
         const buildParticles = () => {
             const isMobile = mediaQuery.matches;
             const particleCount = isMobile ? 20 : 50;
-            return Array.from({ length: particleCount }, () => createParticle(canvas.width, canvas.height, isMobile));
+            return Array.from({ length: particleCount }, () => 
+                createParticle(canvas.width, canvas.height, isMobile)
+            );
         };
 
         const setCanvasSize = () => {
@@ -221,6 +238,8 @@ export function Hero() {
         };
 
         animateParticles();
+
+        // Event listeners
         window.addEventListener('pointermove', handlePointerMove, { passive: true });
         window.addEventListener('pointerdown', handlePointerMove, { passive: true });
         window.addEventListener('pointerup', handlePointerEnd);
@@ -264,23 +283,24 @@ export function Hero() {
             <canvas ref={particleRef} className={styles.particles} />
             <motion.div className={styles.gradientOverlay} style={{ y: y1 }} />
             <motion.div className={styles.noise} style={{ y: y2 }} />
-            <div className={`${styles.layer} ${styles.grid}`} data-speed="0.02"></div>
-            <div className={`${styles.layer} ${styles.glow1}`} data-speed="0.05"></div>
-            <div className={`${styles.layer} ${styles.glow2}`} data-speed="0.03"></div>
+            <div className={`${styles.layer} ${styles.grid}`} data-speed="0.02" />
+            <div className={`${styles.layer} ${styles.glow1}`} data-speed="0.05" />
+            <div className={`${styles.layer} ${styles.glow2}`} data-speed="0.03" />
 
             <div className={styles.heroMain}>
+                {/* LEFT COLUMN */}
                 <div className={styles.copyColumn}>
                     <div className={styles.status}>
-                        <div className={styles.dot}></div>
+                        <div className={styles.dot} />
                         <span className={styles.statusText}>
                             Launch-ready portfolio experience · <span>Available for select projects</span>
                         </span>
                     </div>
 
                     <h1 className={styles.headline}>
-                        <span className={styles.line} ref={line1Ref}></span>
-                        <span className={styles.line} ref={line2Ref}></span>
-                        <span className={styles.line} ref={line3Ref}></span>
+                        <span className={styles.line} ref={line1Ref} />
+                        <span className={styles.line} ref={line2Ref} />
+                        <span className={styles.line} ref={line3Ref} />
                     </h1>
 
                     <p className={styles.lead}>
@@ -319,12 +339,26 @@ export function Hero() {
                             </motion.span>
                         ))}
                     </div>
+
+                    <StatusCard />
                 </div>
 
+                {/* RIGHT COLUMN */}
                 <div className={styles.cardsColumn}>
-                    <div className={styles.rightSlot}>
+                    <FloatingCards />
+
+                    <motion.div
+                        className={styles.terminalWrapper}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{
+                            delay: 1.2,
+                            duration: 0.7,
+                            ease: [0.16, 1, 0.3, 1]
+                        }}
+                    >
                         <DeveloperTerminal />
-                    </div>
+                    </motion.div>
                 </div>
             </div>
         </motion.section>

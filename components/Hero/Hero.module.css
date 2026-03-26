@@ -26,15 +26,10 @@
 }
 
 .cardsColumn {
-    position: relative;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    min-height: 100%;
-    gap: 0;
-    padding: 0;
-    padding-top: 72px;
+    gap: 24px;
+    padding-top: 60px;
 }
 
 .rightSlot {
