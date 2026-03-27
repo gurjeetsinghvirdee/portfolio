@@ -21,6 +21,7 @@ export function Footer() {
                     <a href="#work">Work</a>
                     <a href="#about">About</a>
                     <a href="#contact">Contact</a>
+                    <a href="#services">Services</a>
                 </nav>
 
                 <div className={styles.right}>
