@@ -67,11 +67,21 @@
 }
 
 .eyebrow {
-    font-size: 0.64rem;
-    letter-spacing: 0.32em;
+    font-size: .62rem;
+    letter-spacing: .3em;
     text-transform: uppercase;
     color: var(--accent);
-    margin-bottom: 16px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.eyebrow::before {
+    content: '';
+    width: 32px;
+    height: 1px;
+    background: var(--accent);
 }
 
 .grid {
@@ -131,8 +141,15 @@
     filter: saturate(1.22) contrast(1.08);
 }
 
+.pin {
+    margin-right: 15px;
+    color: var(--accent);
+    font-size: 1.1rem;
+}
+
 .tag {
     position: absolute;
+    display: flex;
     bottom: 32px;
     left: 32px;
     background: var(--bg);

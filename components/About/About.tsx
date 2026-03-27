@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import styles from './About.module.css';
+import { BiMapPin } from 'react-icons/bi';
 
 const stats = [
     { value: '40+', label: 'Projects Shipped' },
@@ -86,7 +87,10 @@ export function About() {
                             alt="Gurjeet Singh" 
                             className={styles.image}
                         />
-                        <div className={styles.tag}>Available Worldwide</div>
+                        <div className={styles.tag}>
+                            <BiMapPin className={styles.pin} />
+                            Available Worldwide
+                        </div>
                     </div>
                 </motion.div>
 

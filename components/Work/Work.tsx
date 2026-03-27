@@ -1,13 +1,14 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { HiArrowUpRight } from "react-icons/hi2";
 import styles from './Work.module.css';
 
 const projects = [
     {
         number: '01',
         category: 'SaaS Platform',
-        title: 'MediaKit — The Privacy-First Media Toolkit',
+        title: 'MediaKit - The Privacy-First Media Toolkit',
         tags: ['Next.js', 'TypeScript', 'Tailwind', 'Shadcn', 'Appwrite'],
         metric: 'Reduced file processing time by 80%',
         bg: styles.bg1,
@@ -23,7 +24,7 @@ const projects = [
     {
         number: '03',
         category: 'AI Tool',
-        title: 'Debate AI — An AI-Powered Debate Platform',
+        title: 'Debate AI - An AI-Powered Debate Platform',
         tags: ['Next.js', 'Anthropic API', 'Supabase', 'Tailwind'],
         metric: '90% user satisfaction in beta testing',
         bg: styles.bg3,
@@ -66,7 +67,9 @@ export function Work() {
                                 </div>
                                 <div className={styles.metric}>{project.metric}</div>
                             </div>
-                            <a href="#" className={styles.link}>↗</a>
+                            <a href="#" className={styles.link}>
+                                <HiArrowUpRight />
+                            </a>
                         </div>
                     </motion.div>
                 ))}

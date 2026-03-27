@@ -13,6 +13,7 @@ export function Nav() {
         { title: 'Work', href: '#work', desc: 'Selected builds' },
         { title: 'About', href: '#about', desc: 'Journey & approach' },
         { title: 'Contact', href: '#contact', desc: 'Start a conversation' },
+        { title: 'Services' , href: '#services', desc: 'What I offer' },
     ];
 
     useEffect(() => {

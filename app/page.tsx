@@ -6,7 +6,7 @@ import { Nav } from '@/components/Nav/Nav';
 import { Marquee } from '@/components/Marquee/Marquee';
 import { Work } from '@/components/Work/Work';
 import { About } from '@/components/About/About';
-// import { Services } from '@/components/Services/Services';
+import { Services } from '@/components/Services/Services';
 // import { Process } from '@/components/Process/Process';
 // import { Testimonials } from '@/components/Testimonials/Testimonials';
 // import { Contact } from '@/components/Contact/Contact';
@@ -22,8 +22,8 @@ export default function Page() {
             <Marquee />
             <Work />
             <About />
-            {/* <Services />
-            <Process />
+            <Services />
+            {/*<Process />
             <Testimonials />
             <Contact /> */}
             <Footer />
