@@ -39,6 +39,10 @@
     padding: 0;
 }
 
+html {
+    scroll-behavior: auto; /* Lenis handles smooth scroll */
+}
+
 body {
     background: var(--bg);
     color: var(--text);
@@ -46,6 +50,13 @@ body {
     font-size: 15px;
     line-height: 1.7;
     overflow-x: hidden;
+    cursor: none;
+}
+
+@media (pointer: coarse) {
+    body {
+        cursor: auto;
+    }
 }
 
 h1, h2 {
@@ -60,7 +71,38 @@ section {
     margin: 0 auto;
 }
 
-/* Utility for interactive elements */
-[data-cursor-hover] {
+/* Custom cursor across all elements */
+a, button, [data-cursor-hover] {
     cursor: none;
+}
+
+/* Selection highlight */
+::selection {
+    background: rgba(212, 168, 83, 0.3);
+    color: var(--text);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border2);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent);
+}
+
+/* Smooth focus for accessibility */
+:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 4px;
 }

@@ -2,20 +2,26 @@
     overflow: hidden;
     border-top: 1px solid var(--border);
     border-bottom: 1px solid var(--border);
-    padding: 14px 0;
     background: var(--bg2);
     transition: background .5s;
+    display: flex;
+    flex-direction: column;
+}
+
+.row {
+    overflow: hidden;
+    padding: 14px 0;
+}
+
+.row + .row {
+    border-top: 1px solid var(--border);
 }
 
 .track {
     display: flex;
     gap: 48px;
     width: max-content;
-    animation: marquee 30s linear infinite;
-}
-
-.wrap:hover .track {
-    animation-play-state: paused;
+    will-change: transform;
 }
 
 .item {
@@ -27,25 +33,32 @@
     display: flex;
     align-items: center;
     gap: 48px;
-    transition: color .25s;
+    transition: color 0.3s, transform 0.4s var(--ease);
+    cursor: none;
 }
 
 .item:hover {
     color: var(--accent);
+    transform: skewX(-3deg) scale(1.08);
 }
 
 .sep {
     color: var(--accent);
     font-size: .6rem;
     font-style: normal;
+    transition: transform 0.3s var(--ease);
 }
 
-@keyframes marquee {
-    from {
-        transform: translateX(0);
-    }
+.item:hover .sep {
+    transform: rotate(180deg) scale(1.4);
+}
 
-    to {
-        transform: translateX(-50%);
+@media (max-width: 640px) {
+    .item {
+        font-size: 0.85rem;
+        gap: 32px;
+    }
+    .track {
+        gap: 32px;
     }
 }

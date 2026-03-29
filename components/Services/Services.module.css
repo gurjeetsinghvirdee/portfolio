@@ -1,7 +1,9 @@
 .section {
     background: var(--bg2);
     transition: background .5s;
-    padding: 120px 64px;
+    padding: clamp(80px, 10vw, 130px) clamp(28px, 6vw, 80px);
+    max-width: 1440px;
+    margin: 0 auto;
 }
 
 .eyebrow {
@@ -35,6 +37,7 @@
     color: var(--accent);
 }
 
+/* ── Service list ── */
 .list {
     margin-top: 72px;
     display: flex;
@@ -42,11 +45,13 @@
     gap: 1px;
     background: var(--border);
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: 16px;
     overflow: hidden;
 }
 
 .item {
+    --holo-x: 50%;
+    --holo-y: 50%;
     position: relative;
     background: var(--bg);
     cursor: none;
@@ -58,13 +63,39 @@
     background: var(--bg2);
 }
 
+.itemActive {
+    background: var(--bg2);
+}
+
+/* ── Holographic shine ── */
+.holoShine {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background: radial-gradient(
+        300px circle at var(--holo-x) var(--holo-y),
+        rgba(212, 168, 83, 0.08) 0%,
+        rgba(100, 200, 255, 0.03) 30%,
+        rgba(168, 85, 247, 0.03) 60%,
+        transparent 80%
+    );
+    opacity: 0;
+    transition: opacity 0.4s;
+}
+
+.item:hover .holoShine {
+    opacity: 1;
+}
+
+/* ── Inner layout ── */
 .itemInner {
     position: relative;
     display: grid;
-    grid-template-columns: 60px 1fr auto;
-    gap: 32px;
-    align-items: start;
-    padding: 32px 36px;
+    grid-template-columns: 60px 1fr auto auto;
+    gap: 24px;
+    align-items: center;
+    padding: 28px 36px;
     z-index: 1;
 }
 
@@ -77,13 +108,37 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
     opacity: .6;
-    padding-top: 4px;
+    transition: opacity 0.3s;
+    min-width: 32px;
+}
+
+.item:hover .num {
+    opacity: 1;
 }
 
 .content {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
+    overflow: hidden;
+}
+
+.nameRow {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.serviceIcon {
+    font-size: 1.2rem;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all 0.4s var(--ease);
+}
+
+.item:hover .serviceIcon {
+    opacity: 1;
+    transform: scale(1);
 }
 
 .name {
@@ -91,6 +146,11 @@
     font-weight: 400;
     font-size: 1.7rem;
     color: var(--text);
+    transition: color 0.3s;
+}
+
+.item:hover .name {
+    color: var(--accent);
 }
 
 .description {
@@ -98,6 +158,20 @@
     line-height: 1.85;
     color: var(--text2);
     max-width: 680px;
+    overflow: hidden;
+}
+
+/* ── Toggle/Arrow icons ── */
+.toggleIcon {
+    color: var(--accent);
+    font-size: 1rem;
+    padding: 8px;
+    opacity: 0.6;
+    transition: all 0.3s var(--ease);
+}
+
+.item:hover .toggleIcon {
+    opacity: 1;
 }
 
 .arrow {
@@ -114,10 +188,11 @@
     transform: translateX(0);
 }
 
+/* ── Glow ── */
 .itemGlow {
     position: absolute;
     inset: 0;
-    background: linear-gradient(90deg, rgba(212, 168, 83, 0.08) 0%, transparent 100%);
+    background: linear-gradient(90deg, rgba(212, 168, 83, 0.06) 0%, transparent 60%);
     opacity: 0;
     transition: opacity .3s;
     pointer-events: none;
@@ -127,17 +202,39 @@
     opacity: 1;
 }
 
-@media (max-width: 960px) {
-    .section {
-        padding: 80px 28px;
-    }
+/* ── Light theme ── */
+[data-theme='light'] .section {
+    background: #f3efe7;
+}
 
+[data-theme='light'] .item {
+    background: #fffaf2;
+}
+
+[data-theme='light'] .item:hover,
+[data-theme='light'] .itemActive {
+    background: #f5eee0;
+}
+
+/* ── Mobile ── */
+@media (max-width: 960px) {
     .itemInner {
-        grid-template-columns: 50px 1fr;
-        gap: 20px;
+        grid-template-columns: 44px 1fr auto;
+        gap: 16px;
+        padding: 24px 20px;
     }
 
     .arrow {
         display: none;
+    }
+
+    .name {
+        font-size: 1.3rem;
+    }
+
+    .serviceIcon {
+        opacity: 1;
+        transform: scale(1);
+        font-size: 1rem;
     }
 }

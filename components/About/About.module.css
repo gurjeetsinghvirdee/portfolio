@@ -4,6 +4,9 @@
     position: relative;
     overflow: hidden;
     background: var(--bg);
+    padding: clamp(80px, 10vw, 130px) clamp(28px, 6vw, 80px);
+    max-width: 1440px;
+    margin: 0 auto;
 }
 
 .section > *:not(.waterBg) {
@@ -11,6 +14,7 @@
     z-index: 2;
 }
 
+/* ── Water background ── */
 .waterBg {
     position: absolute;
     inset: 0;
@@ -66,6 +70,7 @@
     opacity: 0.95;
 }
 
+/* ── Eyebrow ── */
 .eyebrow {
     font-size: .62rem;
     letter-spacing: .3em;
@@ -84,6 +89,7 @@
     background: var(--accent);
 }
 
+/* ── Grid ── */
 .grid {
     display: grid;
     grid-template-columns: 1fr 1.15fr;
@@ -91,6 +97,7 @@
     align-items: center;
 }
 
+/* ── Visual ── */
 .visual {
     position: relative;
 }
@@ -101,30 +108,15 @@
     border: 1px solid var(--border);
     position: relative;
     overflow: hidden;
-    transition: background .5s;
-    box-shadow: 0 0 15px var(--silver-glow);
-    background: var(--gradient-gold);
-    background-clip: border-box;
+    border-radius: 12px;
 }
 
-.frame::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at var(--mouse-x) var(--mouse-y), var(--silver-glow) 0%, transparent 70%);
-  mix-blend-mode: screen; /* Shiny overlay that gleams */
-  opacity: 0.6;
-  pointer-events: none;
-  transition: background 0.3s ease;
-}
-
-.frame::before {
-    content: '';
+.imageOverlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, var(--glow) 0%, transparent 60%);
-    z-index: 1;
+    background: linear-gradient(to top, rgba(8, 8, 7, 0.5) 0%, transparent 50%);
     pointer-events: none;
+    z-index: 1;
 }
 
 .image {
@@ -132,7 +124,7 @@
     height: 100%;
     object-fit: contain;
     object-position: top;
-    filter: sepia(0.3) saturate(1.1);
+    filter: sepia(0.2) saturate(1.1);
     transition: transform 0.9s var(--ease), filter 0.5s var(--ease);
 }
 
@@ -141,8 +133,32 @@
     filter: saturate(1.22) contrast(1.08);
 }
 
+/* ── Decorative corners ── */
+.corner {
+    position: absolute;
+    width: 36px;
+    height: 36px;
+    border: 2px solid var(--accent);
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+.cornerTL {
+    top: -8px;
+    left: -8px;
+    border-right: none;
+    border-bottom: none;
+}
+
+.cornerBR {
+    bottom: -8px;
+    right: -8px;
+    border-left: none;
+    border-top: none;
+}
+
 .pin {
-    margin-right: 15px;
+    margin-right: 10px;
     color: var(--accent);
     font-size: 1.1rem;
 }
@@ -150,78 +166,27 @@
 .tag {
     position: absolute;
     display: flex;
-    bottom: 32px;
-    left: 32px;
-    background: var(--bg);
+    align-items: center;
+    bottom: 24px;
+    left: 24px;
+    background: rgba(8, 8, 7, 0.85);
+    backdrop-filter: blur(10px);
     border: 1px solid var(--border2);
-    padding: 12px 24px;
-    font-size: 0.71rem;
+    padding: 10px 20px;
+    font-size: 0.68rem;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--accent);
+    z-index: 2;
+    border-radius: 8px;
+    cursor: none;
 }
 
-[data-theme='light'] .cursorRipple {
-    background:
-        radial-gradient(440px circle at var(--about-mouse-x) var(--about-mouse-y), rgba(196, 136, 56, 0.12) 0%, rgba(196, 136, 56, 0.04) 44%, transparent 76%),
-        radial-gradient(880px circle at calc(var(--about-mouse-x) - 6%) calc(var(--about-mouse-y) + 10%), rgba(231, 186, 118, 0.07) 0%, transparent 74%),
-        linear-gradient(120deg, rgba(255, 251, 243, 0.36) 0%, rgba(247, 238, 220, 0.24) 46%, rgba(255, 248, 235, 0.34) 100%);
-    mix-blend-mode: normal;
-    opacity: 0.92;
-}
-
-[data-theme='light'] .waterBlobA {
-    background: radial-gradient(ellipse at 30% 35%, rgba(205, 150, 74, 0.14) 0%, rgba(147, 98, 33, 0.04) 58%, transparent 78%);
-}
-
-[data-theme='light'] .waterBlobB {
-    background: radial-gradient(ellipse at 58% 45%, rgba(176, 122, 41, 0.12) 0%, rgba(122, 81, 29, 0.04) 60%, transparent 80%);
-}
-
-[data-theme='light'] .waterBlobC {
-    background: radial-gradient(ellipse at 50% 42%, rgba(232, 180, 106, 0.1) 0%, rgba(171, 120, 48, 0.04) 62%, transparent 86%);
-}
-
-[data-theme='light'] .skill {
-    color: rgba(26, 24, 20, 0.78);
-    border-color: rgba(26, 24, 20, 0.14);
-    background: rgba(255, 255, 255, 0.32);
-}
-
-[data-theme='light'] .skill:hover {
-    color: #fffaf0;
-    border-color: color-mix(in srgb, var(--accent) 82%, #5a3d14);
-}
-
-@keyframes waterFloatA {
-    0% {
-        transform: translate3d(0, 0, 0) scale(1);
-    }
-    100% {
-        transform: translate3d(-24px, 22px, 0) scale(1.08) rotate(4deg);
-    }
-}
-
-@keyframes waterFloatB {
-    0% {
-        transform: translate3d(0, 0, 0) scale(1);
-    }
-    100% {
-        transform: translate3d(26px, -18px, 0) scale(1.06) rotate(-5deg);
-    }
-}
-
-@keyframes waterFloatC {
-    0% {
-        transform: translate3d(0, 0, 0) scale(1);
-    }
-    100% {
-        transform: translate3d(-16px, 14px, 0) scale(1.05) rotate(6deg);
-    }
-}
-
+/* ── Content ── */
 .title {
+    font-family: 'Instrument Serif', serif;
     font-size: clamp(2.8rem, 5.5vw, 5rem);
+    font-weight: 400;
     line-height: 1.05;
     margin-bottom: 32px;
 }
@@ -238,22 +203,28 @@
     margin-bottom: 52px;
 }
 
+/* ── Stats grid ── */
 .statsGrid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 2px;
     background: var(--border);
     margin-bottom: 52px;
+    border-radius: 12px;
+    overflow: hidden;
 }
 
 .stat {
     background: var(--bg2);
     padding: 32px 28px;
-    transition: background 0.4s ease;
+    transition: background 0.4s ease, transform 0.3s var(--ease);
+    cursor: none;
 }
 
 .stat:hover {
     background: var(--bg3);
+    transform: scale(1.02);
+    z-index: 1;
 }
 
 .statValue {
@@ -272,6 +243,19 @@
     margin-top: 8px;
 }
 
+/* ── Skills ── */
+.skillsContainer {
+    position: relative;
+}
+
+.skillsOrbitLabel {
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 16px;
+}
+
 .skills {
     display: flex;
     flex-wrap: wrap;
@@ -287,13 +271,60 @@
     color: var(--text2);
     transition: all 0.3s var(--ease);
     border-radius: 999px;
+    cursor: none;
 }
 
-.skill:hover {
-    border-color: var(--accent);
-    color: var(--accent);
+/* ── Light theme ── */
+[data-theme='light'] .cursorRipple {
+    background:
+        radial-gradient(440px circle at var(--about-mouse-x) var(--about-mouse-y), rgba(196, 136, 56, 0.12) 0%, rgba(196, 136, 56, 0.04) 44%, transparent 76%);
+    mix-blend-mode: normal;
+    opacity: 0.92;
 }
 
+[data-theme='light'] .waterBlobA {
+    background: radial-gradient(ellipse at 30% 35%, rgba(205, 150, 74, 0.14) 0%, transparent 78%);
+}
+
+[data-theme='light'] .waterBlobB {
+    background: radial-gradient(ellipse at 58% 45%, rgba(176, 122, 41, 0.12) 0%, transparent 80%);
+}
+
+[data-theme='light'] .waterBlobC {
+    background: radial-gradient(ellipse at 50% 42%, rgba(232, 180, 106, 0.1) 0%, transparent 86%);
+}
+
+[data-theme='light'] .imageOverlay {
+    background: linear-gradient(to top, rgba(250, 248, 244, 0.4) 0%, transparent 50%);
+}
+
+[data-theme='light'] .tag {
+    background: rgba(250, 248, 244, 0.9);
+}
+
+[data-theme='light'] .skill {
+    color: rgba(26, 24, 20, 0.78);
+    border-color: rgba(26, 24, 20, 0.14);
+    background: rgba(255, 255, 255, 0.32);
+}
+
+/* ── Animations ── */
+@keyframes waterFloatA {
+    0% { transform: translate3d(0, 0, 0) scale(1); }
+    100% { transform: translate3d(-24px, 22px, 0) scale(1.08) rotate(4deg); }
+}
+
+@keyframes waterFloatB {
+    0% { transform: translate3d(0, 0, 0) scale(1); }
+    100% { transform: translate3d(26px, -18px, 0) scale(1.06) rotate(-5deg); }
+}
+
+@keyframes waterFloatC {
+    0% { transform: translate3d(0, 0, 0) scale(1); }
+    100% { transform: translate3d(-16px, 14px, 0) scale(1.05) rotate(6deg); }
+}
+
+/* ── Mobile ── */
 @media (max-width: 960px) {
     .grid {
         grid-template-columns: 1fr;
@@ -312,5 +343,9 @@
 
     [data-theme='light'] .cursorRipple {
         background: radial-gradient(260px circle at var(--about-mouse-x) var(--about-mouse-y), rgba(168, 108, 34, 0.12) 0%, transparent 72%);
+    }
+
+    .statsGrid {
+        grid-template-columns: 1fr 1fr;
     }
 }

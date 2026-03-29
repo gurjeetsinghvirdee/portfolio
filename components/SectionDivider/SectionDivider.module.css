@@ -1,0 +1,26 @@
+.divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    padding: 8px clamp(28px, 8vw, 120px);
+    background: transparent;
+}
+
+.line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+}
+
+.diamond {
+    color: var(--accent);
+    font-size: 0.5rem;
+    opacity: 0.5;
+    animation: diamondPulse 3s ease-in-out infinite;
+}
+
+@keyframes diamondPulse {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.3); }
+}

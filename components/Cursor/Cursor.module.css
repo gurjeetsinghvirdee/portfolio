@@ -12,7 +12,11 @@
     width: 8px;
     height: 8px;
     background: var(--accent);
-    transition: width 0.2s ease, height 0.2s ease, background 0.3s;
+    transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+                height 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+                background 0.3s,
+                opacity 0.3s;
+    mix-blend-mode: difference;
 }
 
 .ring {
@@ -20,28 +24,85 @@
     height: 38px;
     border: 1.5px solid var(--accent);
     opacity: 0.45;
-    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .cursor.hover {
-    width: 22px;
-    height: 22px;
-    background: var(--accent);
+    width: 52px;
+    height: 52px;
+    background: rgba(212, 168, 83, 0.12);
+    mix-blend-mode: normal;
+    border: 1px solid rgba(212, 168, 83, 0.4);
 }
 
 .ring.hover {
-    width: 62px;
-    height: 62px;
-    opacity: 0.28;
+    width: 72px;
+    height: 72px;
+    opacity: 0;
     border-color: var(--accent);
 }
 
 .cursor.click {
-    width: 6px;
-    height: 6px;
-    transform: scale(0.6);
+    width: 4px;
+    height: 4px;
+    background: #fff;
+}
+
+.ring.click {
+    width: 68px;
+    height: 68px;
+    opacity: 0.15;
+    border-width: 3px;
+}
+
+.label {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 10000;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    white-space: nowrap;
+    animation: labelFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.particleCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 9998;
 }
 
 [data-theme="light"] .ring {
     border-color: #8c5e1e;
+}
+
+[data-theme="light"] .cursor.hover {
+    background: rgba(140, 94, 30, 0.08);
+    border-color: rgba(140, 94, 30, 0.35);
+}
+
+@keyframes labelFadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+@media (pointer: coarse) {
+    .cursor, .ring, .label, .particleCanvas {
+        display: none !important;
+    }
 }

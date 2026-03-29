@@ -1,0 +1,416 @@
+.section {
+    --aurora-intensity: 0;
+    --contact-mouse-x: 50%;
+    --contact-mouse-y: 50%;
+    position: relative;
+    overflow: hidden;
+    background: var(--bg);
+    padding: clamp(100px, 12vw, 160px) clamp(28px, 6vw, 80px);
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ── Aurora background ── */
+.aurora {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.auroraBlob1,
+.auroraBlob2,
+.auroraBlob3 {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: calc(0.15 + var(--aurora-intensity) * 0.35);
+    transition: opacity 0.8s ease;
+}
+
+.auroraBlob1 {
+    width: 40vw;
+    height: 40vw;
+    max-width: 500px;
+    max-height: 500px;
+    top: -10%;
+    right: -5%;
+    background: radial-gradient(circle, rgba(212, 168, 83, 0.4) 0%, transparent 70%);
+    animation: auroraDrift1 12s ease-in-out infinite alternate;
+}
+
+.auroraBlob2 {
+    width: 35vw;
+    height: 35vw;
+    max-width: 450px;
+    max-height: 450px;
+    bottom: -8%;
+    left: -8%;
+    background: radial-gradient(circle, rgba(168, 85, 247, 0.3) 0%, transparent 70%);
+    animation: auroraDrift2 16s ease-in-out infinite alternate;
+}
+
+.auroraBlob3 {
+    width: 30vw;
+    height: 30vw;
+    max-width: 380px;
+    max-height: 380px;
+    top: 40%;
+    left: 40%;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.25) 0%, transparent 70%);
+    animation: auroraDrift3 14s ease-in-out infinite alternate;
+}
+
+.auroraMouse {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        400px circle at var(--contact-mouse-x) var(--contact-mouse-y),
+        rgba(212, 168, 83, 0.12) 0%,
+        transparent 60%
+    );
+    mix-blend-mode: screen;
+}
+
+/* ── Content ── */
+.content {
+    position: relative;
+    z-index: 1;
+    width: min(680px, 100%);
+    margin: 0 auto;
+}
+
+.eyebrow {
+    font-size: .62rem;
+    letter-spacing: .3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    justify-content: center;
+}
+
+.eyebrow::before {
+    content: '';
+    width: 32px;
+    height: 1px;
+    background: var(--accent);
+}
+
+/* ── CTA state ── */
+.ctaContainer {
+    text-align: center;
+}
+
+.ctaTitle {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(3rem, 7vw, 5.5rem);
+    font-weight: 400;
+    line-height: 1.05;
+    color: var(--text);
+    margin-bottom: 24px;
+}
+
+.ctaTitle em {
+    color: var(--accent);
+    font-style: italic;
+}
+
+.ctaText {
+    font-size: 0.9rem;
+    line-height: 1.8;
+    color: var(--text2);
+    max-width: 480px;
+    margin: 0 auto 48px;
+}
+
+/* ── Morph button ── */
+.morphButton {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 40px;
+    background: transparent;
+    border: 1.5px solid var(--accent);
+    border-radius: 9999px;
+    color: var(--accent);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    cursor: none;
+    overflow: hidden;
+    transition: all 0.4s var(--ease);
+}
+
+.morphButton:hover {
+    background: var(--accent);
+    color: var(--bg);
+    box-shadow: 0 8px 40px rgba(212, 168, 83, 0.25);
+}
+
+.morphText {
+    position: relative;
+    z-index: 1;
+}
+
+.morphArrow {
+    position: relative;
+    z-index: 1;
+    transition: transform 0.3s var(--ease);
+}
+
+.morphButton:hover .morphArrow {
+    transform: translateX(4px);
+}
+
+.morphShine {
+    position: absolute;
+    top: 0;
+    left: -120%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+    transition: left 0.6s var(--ease);
+}
+
+.morphButton:hover .morphShine {
+    left: 120%;
+}
+
+/* ── Form ── */
+.form {
+    background: color-mix(in srgb, var(--bg2) 80%, transparent);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+}
+
+.formProgress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--border);
+    border-radius: 3px 3px 0 0;
+    overflow: hidden;
+}
+
+.formProgressBar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), #a855f7, #4a9eff);
+    border-radius: 3px;
+}
+
+.formGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    margin-bottom: 32px;
+}
+
+.fieldGroup {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+/* ── Field with floating label ── */
+.field {
+    position: relative;
+}
+
+.input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    padding: 20px 0 10px;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 0.88rem;
+    outline: none;
+    transition: border-color 0.3s;
+    border-radius: 0;
+}
+
+.input:focus {
+    border-color: var(--accent);
+}
+
+.textarea {
+    resize: vertical;
+    min-height: 100px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 16px 10px;
+}
+
+.textarea:focus {
+    border-color: var(--accent);
+}
+
+.fieldLabel {
+    position: absolute;
+    top: 20px;
+    left: 0;
+    font-size: 0.78rem;
+    color: var(--text3);
+    pointer-events: none;
+    transition: all 0.3s var(--ease);
+    transform-origin: left;
+}
+
+.textarea ~ .fieldLabel {
+    left: 16px;
+}
+
+.input:focus ~ .fieldLabel,
+.input:not(:placeholder-shown) ~ .fieldLabel {
+    top: 2px;
+    font-size: 0.6rem;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+/* ── Animated underline ── */
+.fieldLine {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: var(--accent);
+    transition: all 0.4s var(--ease);
+}
+
+.input:focus ~ .fieldLine {
+    left: 0;
+    width: 100%;
+}
+
+/* ── Form actions ── */
+.formActions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.backButton {
+    background: none;
+    border: none;
+    color: var(--text3);
+    font-family: inherit;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: color 0.3s;
+    padding: 8px 0;
+}
+
+.backButton:hover {
+    color: var(--text);
+}
+
+.sendButton {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 32px;
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    border-radius: 9999px;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    cursor: none;
+    transition: all 0.3s var(--ease);
+}
+
+.sendButton:hover {
+    box-shadow: 0 8px 30px rgba(212, 168, 83, 0.3);
+}
+
+.sendIcon {
+    transition: transform 0.3s var(--ease);
+}
+
+.sendButton:hover .sendIcon {
+    transform: translate(3px, -3px);
+}
+
+/* ── Sent state ── */
+.sentContainer {
+    text-align: center;
+    padding: 60px 0;
+}
+
+.paperPlane {
+    font-size: 4rem;
+    margin-bottom: 24px;
+}
+
+.sentTitle {
+    font-family: 'Instrument Serif', serif;
+    font-size: 2.4rem;
+    color: var(--accent);
+    margin-bottom: 12px;
+}
+
+.sentText {
+    color: var(--text2);
+    font-size: 0.85rem;
+}
+
+/* ── Light theme ── */
+[data-theme='light'] .form {
+    background: rgba(255, 255, 255, 0.7);
+    border-color: rgba(26, 24, 20, 0.1);
+}
+
+[data-theme='light'] .auroraMouse {
+    mix-blend-mode: normal;
+}
+
+/* ── Aurora animations ── */
+@keyframes auroraDrift1 {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(-30px, 20px) scale(1.1); }
+}
+
+@keyframes auroraDrift2 {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(20px, -25px) scale(1.08); }
+}
+
+@keyframes auroraDrift3 {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(-15px, -30px) scale(1.12); }
+}
+
+/* ── Mobile ── */
+@media (max-width: 640px) {
+    .fieldGroup {
+        grid-template-columns: 1fr;
+    }
+
+    .form {
+        padding: 28px 20px;
+    }
+
+    .ctaTitle {
+        font-size: clamp(2.4rem, 10vw, 3.6rem);
+    }
+}

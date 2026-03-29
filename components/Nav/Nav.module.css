@@ -20,6 +20,26 @@
     border-bottom-color: var(--border);
 }
 
+/* ── Scroll Progress ── */
+.progressTrack {
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: transparent;
+    z-index: 10;
+}
+
+.progressBar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), #a855f7, #4a9eff);
+    border-radius: 2px;
+    transition: width 0.05s linear;
+    box-shadow: 0 0 8px rgba(212, 168, 83, 0.4);
+}
+
+/* ── Logo ── */
 .logo {
     font-family: 'Syne', sans-serif;
     font-weight: 800;
@@ -30,6 +50,7 @@
     display: flex;
     align-items: center;
     gap: 4px;
+    cursor: none;
 }
 
 .dot {
@@ -38,6 +59,7 @@
     line-height: 0.8;
 }
 
+/* ── Center links ── */
 .center {
     display: flex;
     gap: 42px;
@@ -52,27 +74,30 @@
     text-decoration: none;
     position: relative;
     transition: color 0.3s var(--ease);
+    padding-bottom: 4px;
+    cursor: none;
 }
 
 .center a:hover {
     color: var(--text);
 }
 
-.center a::after {
-    content: '';
+/* ── Active indicator (animated pill) ── */
+.activeLink {
+    color: var(--accent) !important;
+}
+
+.activeIndicator {
     position: absolute;
     bottom: -4px;
     left: 0;
-    width: 0;
-    height: 1px;
+    right: 0;
+    height: 2px;
     background: var(--accent);
-    transition: width 0.4s var(--ease);
+    border-radius: 2px;
 }
 
-.center a:hover::after {
-    width: 100%;
-}
-
+/* ── Nav right ── */
 .navRight {
     display: flex;
     align-items: center;
@@ -89,14 +114,17 @@
     text-decoration: none;
     border-radius: 9999px;
     transition: all 0.4s var(--ease);
+    cursor: none;
 }
 
 .cta:hover {
     background: var(--accent);
     color: var(--bg);
     border-color: var(--accent);
+    box-shadow: 0 4px 20px rgba(212, 168, 83, 0.2);
 }
 
+/* ── Hamburger ── */
 .hamburger {
     display: none;
     flex-direction: column;
@@ -105,6 +133,7 @@
     border: none;
     cursor: pointer;
     padding: 8px;
+    z-index: 1200;
 }
 
 .hamburger span {
@@ -112,6 +141,7 @@
     height: 2px;
     background: var(--text);
     transition: all 0.4s var(--ease);
+    transform-origin: center;
 }
 
 .hamburger.open span:nth-child(1) {
@@ -120,24 +150,34 @@
 
 .hamburger.open span:nth-child(2) {
     opacity: 0;
+    transform: scaleX(0);
 }
 
 .hamburger.open span:nth-child(3) {
     transform: rotate(-45deg) translate(5px, -5px);
 }
 
-/* Mobile Menu */
+/* ── Mobile Menu (Full-screen circular reveal) ── */
 .mobileMenu {
     position: fixed;
     top: 0;
-    right: 0;
+    left: 0;
     width: 100%;
-    max-width: 380px;
     height: 100vh;
-    background: var(--bg2);
+    height: 100dvh;
     z-index: 1100;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     padding: 100px 40px 60px;
-    box-shadow: -20px 0 60px rgba(0, 0, 0, 0.4);
+}
+
+.mobileMenuBg {
+    position: absolute;
+    inset: 0;
+    background: var(--bg);
+    opacity: 0.98;
+    z-index: -1;
 }
 
 .closeButton {
@@ -149,12 +189,19 @@
     font-size: 1.8rem;
     color: var(--text2);
     cursor: pointer;
+    z-index: 2;
+    transition: transform 0.3s var(--ease);
+}
+
+.closeButton:hover {
+    transform: rotate(90deg);
 }
 
 .mobileMenuContent {
     display: flex;
     flex-direction: column;
     gap: 36px;
+    z-index: 1;
 }
 
 .mobileLink {
@@ -163,6 +210,11 @@
     gap: 20px;
     text-decoration: none;
     color: var(--text);
+    transition: color 0.3s;
+}
+
+.mobileLink:hover {
+    color: var(--accent);
 }
 
 .index {
@@ -172,10 +224,10 @@
     margin-top: 4px;
 }
 
-.title {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.55rem;
-    font-weight: 600;
+.mobileTitle {
+    font-family: 'Instrument Serif', serif;
+    font-size: 2.2rem;
+    font-weight: 400;
     line-height: 1.1;
 }
 
@@ -185,7 +237,24 @@
     margin-top: 6px;
 }
 
-/* Responsive */
+.mobileFooter {
+    margin-top: auto;
+    padding-top: 40px;
+}
+
+.mobileEmail {
+    font-size: 0.72rem;
+    color: var(--text3);
+    text-decoration: none;
+    letter-spacing: 0.06em;
+    transition: color 0.3s;
+}
+
+.mobileEmail:hover {
+    color: var(--accent);
+}
+
+/* ── Responsive ── */
 @media (max-width: 960px) {
     .center {
         display: none;

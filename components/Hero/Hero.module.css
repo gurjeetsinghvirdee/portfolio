@@ -14,6 +14,7 @@
     align-items: center;
 }
 
+/* ── Background layers ── */
 .warpBg {
     position: absolute;
     inset: 0;
@@ -67,32 +68,32 @@
     animation: warpPulse 8s ease-in-out infinite alternate;
 }
 
+.floatingCanvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* ── Content grid ── */
 .content {
-    width: min(1560px, 100%);
+    width: min(1200px, 100%);
     margin: 0 auto;
     display: grid;
-    grid-template-columns: minmax(0, 1.12fr) minmax(0, 0.88fr);
-    gap: clamp(42px, 5vw, 94px);
-    align-items: end;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    align-items: start;
     z-index: 2;
     position: relative;
 }
 
 .copyColumn {
-    max-width: none;
+    max-width: 1040px;
 }
 
-.visualColumn {
-    display: flex;
-    justify-content: flex-end;
-    align-items: flex-end;
-}
-
-.terminalWrapper {
-    width: min(620px, 100%);
-    transform: translateY(6px);
-}
-
+/* ── Status badge ── */
 .heroStatus {
     display: flex;
     align-items: center;
@@ -121,17 +122,21 @@
     animation: softPulse 2.4s ease-in-out infinite;
 }
 
+/* ── Headline with character reveal ── */
 .headline {
     font-family: 'Instrument Serif', serif;
     font-size: clamp(4.8rem, 12.3vw, 13.2rem);
     line-height: 0.9;
     letter-spacing: -0.042em;
     color: var(--text);
+    perspective: 1000px;
+    cursor: none;
 }
 
 .line {
     display: block;
-    overflow: hidden;
+    overflow: visible;
+    white-space: nowrap;
 }
 
 .word {
@@ -140,11 +145,58 @@
     transform: translateY(110%);
 }
 
-.word em {
+/* Per-character animation */
+.char {
+    display: inline-block;
+    opacity: 1; /* was 0 */
+    transform: translateY(120%) rotateX(-80deg);
+    transform-origin: bottom center;
+    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: calc(0.5s + var(--char-delay, 0s));
+}
+
+.headline.revealed .char {
+    transform: translateY(0) rotateX(0deg);
+}
+
+.headline em {
     color: var(--accent);
     font-style: italic;
 }
 
+.headline em .char {
+    color: var(--accent);
+}
+
+/* ── Glitch effect on hover ── */
+.headline.glitching {
+    animation: glitchText 0.4s ease-in-out;
+}
+
+.headline.glitching::before,
+.headline.glitching::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.headline.glitching::before {
+    animation: glitchRed 0.3s ease-in-out;
+    color: rgba(255, 50, 50, 0.5);
+    clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+}
+
+.headline.glitching::after {
+    animation: glitchBlue 0.3s ease-in-out;
+    color: rgba(50, 120, 255, 0.5);
+    clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+}
+
+/* ── Bottom section ── */
 .heroBottom {
     margin-top: 54px;
     display: flex;
@@ -178,41 +230,99 @@
     gap: 16px;
 }
 
+.secondaryCta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 24px;
+    border-radius: 9999px;
+    border: 1px solid var(--border);
+    color: var(--text2);
+    text-decoration: none;
+    font-size: 0.77rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: all 0.35s var(--ease);
+}
+
+.secondaryCta:hover {
+    color: var(--text);
+    border-color: var(--accent);
+    transform: translateY(-2px);
+}
+
+.proofStrip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 22px;
+    margin-bottom: 20px;
+}
+
+.proofChip {
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 12px;
+    border-radius: 9999px;
+    border: 1px solid var(--border2);
+    background: color-mix(in oklab, var(--bg2) 74%, transparent);
+    color: var(--text2);
+    font-size: 0.66rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+/* ── CTA with shine effect ── */
 .primaryCTA {
+    position: relative;
     background: transparent;
     color: var(--text);
     border: 1px solid var(--border2);
-    padding: 12px 24px;
+    padding: 14px 28px;
     border-radius: 9999px;
     font-size: 0.79rem;
     letter-spacing: 0.12em;
     font-weight: 600;
     text-decoration: none;
     transition: all 0.45s var(--ease);
+    overflow: hidden;
+    cursor: none;
+}
+
+.ctaText {
+    position: relative;
+    z-index: 1;
+}
+
+.ctaShine {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(212, 168, 83, 0.15),
+        rgba(255, 255, 255, 0.12),
+        transparent
+    );
+    transition: left 0.6s var(--ease);
 }
 
 .primaryCTA:hover {
-    transform: translateY(-2px);
+    transform: translateY(-3px);
     border-color: var(--accent);
     color: var(--accent);
+    box-shadow: 0 8px 30px rgba(212, 168, 83, 0.15);
 }
 
-.secondaryCTA {
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 16px 34px;
-    border-radius: 9999px;
-    font-size: 0.79rem;
-    letter-spacing: 0.12em;
-    text-decoration: none;
-    transition: all 0.4s var(--ease);
+.primaryCTA:hover .ctaShine {
+    left: 100%;
 }
 
-.secondaryCTA:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-}
-
+/* ── Scroll hint ── */
 .scrollHint {
     display: flex;
     flex-direction: column;
@@ -224,6 +334,10 @@
     color: var(--text3);
 }
 
+.scrollText {
+    animation: scrollFade 2.5s ease-in-out infinite;
+}
+
 .scrollLine {
     width: 1px;
     height: 48px;
@@ -231,6 +345,7 @@
     animation: breathe 2.5s ease-in-out infinite;
 }
 
+/* ── Gradient overlay ── */
 .gradientOverlay {
     position: absolute;
     inset: 0;
@@ -244,10 +359,7 @@
     z-index: 1;
 }
 
-.hero:hover .gradientOverlay {
-    opacity: 1;
-}
-
+/* ── Light theme ── */
 [data-theme='light'] .plGrid {
     background-image:
         linear-gradient(rgba(168, 110, 35, 0.18) 1px, transparent 1px),
@@ -273,7 +385,7 @@
     opacity: 0.72;
 }
 
-/* Desktop Layout */
+/* ── Desktop ── */
 @media (min-width: 961px) {
     .hero {
         padding: 132px clamp(44px, 5vw, 84px) 64px;
@@ -284,6 +396,7 @@
     }
 }
 
+/* ── Mobile ── */
 @media (max-width: 960px) {
     .hero {
         padding: 108px 24px 50px;
@@ -295,7 +408,7 @@
     }
 
     .headline {
-        font-size: clamp(4rem, 16vw, 7.4rem);
+        font-size: clamp(3.6rem, 14vw, 7.4rem);
     }
 
     .heroBottom {
@@ -310,16 +423,6 @@
         flex-direction: row;
         justify-content: space-between;
         align-items: flex-end;
-    }
-
-    .visualColumn {
-        justify-content: flex-start;
-    }
-
-    .terminalWrapper {
-        width: 100%;
-        max-width: 620px;
-        transform: none;
     }
 
     .plGrid {
@@ -338,33 +441,52 @@
     }
 }
 
+/* ── Keyframes ── */
 @keyframes warpPulse {
-    0% {
-        transform: translateY(0) scale(1);
-        opacity: 0.95;
-    }
-    100% {
-        transform: translateY(6px) scale(1.04);
-        opacity: 0.72;
-    }
+    0% { transform: translateY(0) scale(1); opacity: 0.95; }
+    100% { transform: translateY(6px) scale(1.04); opacity: 0.72; }
 }
 
 @keyframes softPulse {
-    0%, 100% {
-        box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.2);
-    }
-    50% {
-        box-shadow: 0 0 0 6px rgba(74, 222, 128, 0.05);
-    }
+    0%, 100% { box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.2); }
+    50% { box-shadow: 0 0 0 8px rgba(74, 222, 128, 0.05); }
 }
 
 @keyframes breathe {
-    0%, 100% {
-        opacity: 1;
-        transform: scaleY(1);
-    }
-    50% {
-        opacity: 0.3;
-        transform: scaleY(0.5);
-    }
+    0%, 100% { opacity: 1; transform: scaleY(1); }
+    50% { opacity: 0.3; transform: scaleY(0.5); }
+}
+
+@keyframes scrollFade {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+}
+
+@keyframes glitchText {
+    0% { transform: translate(0); }
+    20% { transform: translate(-3px, 2px); }
+    40% { transform: translate(3px, -2px); }
+    60% { transform: translate(-2px, -1px); }
+    80% { transform: translate(2px, 1px); }
+    100% { transform: translate(0); }
+}
+
+@keyframes glitchRed {
+    0% { transform: translate(0); }
+    25% { transform: translate(4px, -2px); }
+    50% { transform: translate(-3px, 1px); }
+    75% { transform: translate(2px, -3px); }
+    100% { transform: translate(0); }
+}
+
+@keyframes glitchBlue {
+    0% { transform: translate(0); }
+    25% { transform: translate(-4px, 2px); }
+    50% { transform: translate(3px, -1px); }
+    75% { transform: translate(-2px, 3px); }
+    100% { transform: translate(0); }
+}
+
+.noWrap {
+    white-space: nowrap;
 }
