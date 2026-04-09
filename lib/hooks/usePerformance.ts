@@ -35,11 +35,7 @@ function detectTier(): PerformanceTier {
     const isSmallScreen = window.innerWidth < 768;
 
     if (isMobile || isSmallScreen) {
-        // Mobile can still be medium if decent device
-        if (navigator.hardwareConcurrency && navigator.hardwareConcurrency >= 6) {
-            cachedTier = 'medium';
-            return 'medium';
-        }
+        // Keep mobile/small screens in low tier for smoother UX.
         cachedTier = 'low';
         return 'low';
     }
@@ -66,10 +62,10 @@ export function usePerformance() {
         isHigh: tier === 'high',
         isMedium: tier === 'medium',
         isLow: tier === 'low',
-        enableParticles: tier !== 'low',
-        enableComplexAnimations: tier !== 'low',
-        enableMagneticCursor: tier !== 'low',
-        enableSmoothScroll: true, // Always enable, it's lightweight
+        enableParticles: tier === 'high',
+        enableComplexAnimations: tier === 'high',
+        enableMagneticCursor: tier === 'high',
+        enableSmoothScroll: tier !== 'low',
     };
 }
 

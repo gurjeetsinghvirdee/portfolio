@@ -6,6 +6,30 @@ import { HiArrowUpRight } from 'react-icons/hi2';
 import { usePerformance } from '@/lib/hooks/usePerformance';
 import styles from './Work.module.css';
 
+function LivePreview({ url, color }: { url: string; color: string }) {
+    const [loaded, setLoaded] = useState(false);
+
+    return (
+        <div className={styles.iframeWrapper}>
+            {!loaded && (
+                <div className={styles.iframeLoader} style={{ '--card-color': color } as React.CSSProperties}>
+                    <div className={styles.iframeSpinner} />
+                    <span>Loading preview…</span>
+                </div>
+            )}
+            <iframe
+                src={url}
+                title="Project Preview"
+                className={styles.iframe}
+                onLoad={() => setLoaded(true)}
+                sandbox="allow-scripts allow-same-origin"
+                loading="lazy"
+                scrolling="no"
+            />
+        </div>
+    );
+}
+
 const projects = [
     {
         number: '01',
@@ -13,7 +37,7 @@ const projects = [
         title: 'MediaKit - The Privacy-First Media Toolkit',
         tags: ['Next.js', 'TypeScript', 'Tailwind', 'Shadcn', 'Appwrite'],
         metric: 'Reduced file processing time by 80%',
-        image: '/mediakit.jpeg',
+        url: 'https://usemediakit.app/',
         color: '#d4a853',
     },
     {
@@ -22,7 +46,7 @@ const projects = [
         title: '3D Latency Topology Visualizer',
         tags: ['Three.js', 'WebGL', 'Recharts', 'Next.js', 'TypeScript'],
         metric: 'Real-time visualization for 15+ global nodes',
-        image: '/topology.png',
+        url: 'https://latency-topology-visualizer-steel.vercel.app/',
         color: '#4a9eff',
     },
     {
@@ -31,7 +55,7 @@ const projects = [
         title: 'Debate AI - An AI-Powered Debate Platform',
         tags: ['Next.js', 'Anthropic API', 'Supabase', 'Tailwind'],
         metric: '90% user satisfaction in beta testing',
-        image: '/debate-ai.png',
+        url: 'https://debate-ai-eta.vercel.app/',
         color: '#a855f7',
     },
 ];
@@ -47,9 +71,12 @@ export function Work() {
         if (!enableComplexAnimations) return;
 
         let ctx: ReturnType<typeof import('gsap').gsap.context> | undefined;
+        let isActive = true;
 
         const setup = async () => {
             const { gsap, ScrollTrigger } = await import('@/lib/smooth-scroll');
+            if (!isActive) return;
+
             const section = sectionRef.current;
             const scroll = scrollRef.current;
             if (!section || !scroll) return;
@@ -78,11 +105,20 @@ export function Work() {
                     },
                 });
             }, section);
+
+            // Guard against StrictMode effect teardown racing async setup.
+            if (!isActive) {
+                ctx?.revert();
+                ScrollTrigger.refresh();
+            }
         };
 
-        setup();
+        setup().catch((error) => {
+            console.error('Failed to initialize Work scroll animation', error);
+        });
 
         return () => {
+            isActive = false;
             ctx?.revert();
         };
     }, [enableComplexAnimations]);
@@ -148,14 +184,13 @@ export function Work() {
                         key={i}
                         className={styles.card}
                         data-cursor-hover
-                        data-cursor-label="View"
                         onMouseMove={handleMouseMove}
                         onMouseLeave={handleMouseLeave}
                         style={{ '--card-color': project.color } as React.CSSProperties}
                     >
                         <div className={styles.tiltGlow} />
                         <div className={styles.cardImage}>
-                            <img src={project.image} alt={project.title} />
+                            <LivePreview url={project.url} color={project.color} />
                         </div>
                         <div className={styles.cardContent}>
                             <div className={styles.cardNumber}>{project.number}</div>

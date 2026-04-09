@@ -121,6 +121,16 @@
     font-style: italic;
 }
 
+.ctaTitleAccent {
+    color: var(--accent);
+    font-style: italic;
+}
+
+.gravityChar {
+    display: inline-block;
+    will-change: transform;
+}
+
 .ctaText {
     font-size: 0.9rem;
     line-height: 1.8;
@@ -208,7 +218,7 @@
 
 .formProgressBar {
     height: 100%;
-    background: linear-gradient(90deg, var(--accent), #a855f7, #4a9eff);
+    background: var(--accent);
     border-radius: 3px;
 }
 

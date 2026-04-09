@@ -1,121 +1,41 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import { FaXTwitter, FaGithub, FaLinkedinIn } from 'react-icons/fa6';
 import { MdOutlineMail } from 'react-icons/md';
 import styles from './Footer.module.css';
 
-function GravityText({ text }: { text: string }) {
-    const containerRef = useRef<HTMLDivElement>(null);
-    const mouseRef = useRef({ x: 0, y: 0 });
+export function Footer() {
+    const [showTop, setShowTop] = useState(false);
 
     useEffect(() => {
-        const container = containerRef.current;
-        if (!container) return;
-
-        const chars = container.querySelectorAll<HTMLSpanElement>(`.${styles.gravityChar}`);
-
-        let rafId: number;
-
-        const animate = () => {
-            chars.forEach((char) => {
-                const rect = char.getBoundingClientRect();
-                const charCenterX = rect.left + rect.width / 2;
-                const charCenterY = rect.top + rect.height / 2;
-                const dx = mouseRef.current.x - charCenterX;
-                const dy = mouseRef.current.y - charCenterY;
-                const dist = Math.sqrt(dx * dx + dy * dy);
-
-                if (dist < 200) {
-                    const force = (200 - dist) / 200;
-                    const moveX = -dx * force * 0.15;
-                    const moveY = -dy * force * 0.15;
-                    char.style.transform = `translate(${moveX}px, ${moveY}px)`;
-                } else {
-                    char.style.transform = 'translate(0, 0)';
-                }
-            });
-
-            rafId = requestAnimationFrame(animate);
-        };
-
-        const handleMove = (e: MouseEvent) => {
-            mouseRef.current = { x: e.clientX, y: e.clientY };
-        };
-
-        window.addEventListener('mousemove', handleMove, { passive: true });
-        rafId = requestAnimationFrame(animate);
-
-        return () => {
-            cancelAnimationFrame(rafId);
-            window.removeEventListener('mousemove', handleMove);
-        };
+        const handleScroll = () => setShowTop(window.scrollY > 400);
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        handleScroll();
+        return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    return (
-        <div ref={containerRef} className={styles.gravityContainer}>
-            {text.split('').map((char, i) => (
-                <span
-                    key={i}
-                    className={`${styles.gravityChar} ${char === ' ' ? styles.gravitySpace : ''}`}
-                    style={{ transitionDelay: `${i * 0.01}s` }}
-                >
-                    {char === ' ' ? '\u00A0' : char}
-                </span>
-            ))}
-        </div>
-    );
-}
-
-function ScrambleReveal({ text }: { text: string }) {
-    const [display, setDisplay] = useState(text.replace(/[a-zA-Z0-9@.]/g, '•'));
-    const ref = useRef<HTMLSpanElement>(null);
-    const inView = useInView(ref, { once: true, margin: '-50px' });
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@.';
-
-    useEffect(() => {
-        if (!inView) return;
-
-        let iteration = 0;
-        const interval = setInterval(() => {
-            setDisplay(
-                text.split('').map((c, i) => {
-                    if (c === ' ') return ' ';
-                    return i < iteration ? c : chars[Math.floor(Math.random() * chars.length)];
-                }).join('')
-            );
-            iteration += 1;
-            if (iteration > text.length) clearInterval(interval);
-        }, 30);
-
-        return () => clearInterval(interval);
-    }, [inView, text]);
-
-    return <span ref={ref} className={styles.scramble}>{display}</span>;
-}
-
-export function Footer() {
-    const [showRocket, setShowRocket] = useState(false);
-
     const scrollToTop = () => {
-        setShowRocket(true);
-        setTimeout(() => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            setTimeout(() => setShowRocket(false), 1200);
-        }, 400);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     return (
         <footer className={styles.footer}>
-            <div className={styles.topSection}>
-                <div className={styles.gravityHeadline} data-cursor-hover data-cursor-label="Repel ↗">
-                    <GravityText text="Let's Talk." />
-                </div>
-                <div className={styles.emailRow}>
-                    <ScrambleReveal text="gurjeetsinghvirdee@gmail.com" />
-                </div>
-            </div>
+            {/* Fixed floating back-to-top button */}
+            <motion.button
+                className={styles.floatingTop}
+                onClick={scrollToTop}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: showTop ? 1 : 0, y: showTop ? 0 : 16 }}
+                transition={{ duration: 0.3 }}
+                style={{ pointerEvents: showTop ? 'auto' : 'none' }}
+                aria-label="Back to top"
+                data-cursor-hover
+                data-cursor-label="Top"
+            >
+                ↑
+            </motion.button>
 
             <div className={styles.divider} />
 
@@ -159,7 +79,7 @@ export function Footer() {
                             <FaGithub size={18} />
                         </a>
                         <a
-                            href="https://linkedin.com/in/gurjeetsinghvirdee"
+                            href="https://www.linkedin.com/in/gurjeet-singh-virdee-25a476199/"
                             target="_blank"
                             rel="noopener noreferrer"
                             className={styles.social}
@@ -177,16 +97,6 @@ export function Footer() {
                             <MdOutlineMail size={20} />
                         </a>
                     </div>
-
-                    <motion.button
-                        className={styles.backToTop}
-                        onClick={scrollToTop}
-                        whileHover={{ y: -4 }}
-                        data-cursor-hover
-                        data-cursor-label="Top ↑"
-                    >
-                        {showRocket ? '🚀' : '↑'}
-                    </motion.button>
                 </div>
             </div>
         </footer>

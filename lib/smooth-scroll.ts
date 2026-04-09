@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { getPerformanceTier } from '@/lib/hooks/usePerformance';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -13,6 +14,10 @@ export function useSmoothScroll() {
     const lenisRef = useRef<Lenis | null>(null);
 
     useEffect(() => {
+        if (getPerformanceTier() === 'low') {
+            return;
+        }
+
         if (lenisInstance) {
             lenisRef.current = lenisInstance;
             return;

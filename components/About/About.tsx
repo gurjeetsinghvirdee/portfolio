@@ -97,12 +97,17 @@ export function About() {
 
     // Image clip-path reveal on scroll
     useEffect(() => {
+        let isActive = true;
+        let animation: { kill: () => void } | undefined;
+
         const setup = async () => {
             const { gsap, ScrollTrigger } = await import('@/lib/smooth-scroll');
+            if (!isActive) return;
+
             const img = imageRef.current;
             if (!img) return;
 
-            gsap.fromTo(img, 
+            animation = gsap.fromTo(img, 
                 { clipPath: 'inset(100% 0 0 0)' },
                 {
                     clipPath: 'inset(0% 0 0 0)',
@@ -115,13 +120,16 @@ export function About() {
                     },
                 }
             );
-
-            return () => {
-                ScrollTrigger.getAll().forEach(t => t.kill());
-            };
         };
 
-        setup();
+        setup().catch((error) => {
+            console.error('Failed to initialize About animation', error);
+        });
+
+        return () => {
+            isActive = false;
+            animation?.kill();
+        };
     }, []);
 
     return (

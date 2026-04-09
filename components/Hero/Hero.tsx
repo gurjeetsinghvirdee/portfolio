@@ -83,6 +83,8 @@ export function Hero() {
 
     // Mouse parallax
     useEffect(() => {
+        if (!enableComplexAnimations) return;
+
         const section = heroRef.current;
         if (!section) return;
 
@@ -140,7 +142,7 @@ export function Hero() {
             window.removeEventListener('scroll', handleScroll);
             section.removeEventListener('mouseleave', handleLeave);
         };
-    }, []);
+    }, [enableComplexAnimations]);
 
     return (
         <motion.section
@@ -182,7 +184,6 @@ export function Hero() {
                         ref={headlineRef}
                         className={styles.headline}
                         data-cursor-hover
-                        data-cursor-label="✨"
                     />
 
                     <motion.div

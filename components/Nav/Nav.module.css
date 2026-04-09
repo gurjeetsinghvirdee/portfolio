@@ -33,10 +33,14 @@
 
 .progressBar {
     height: 100%;
-    background: linear-gradient(90deg, var(--accent), #a855f7, #4a9eff);
+    background: var(--accent);
     border-radius: 2px;
     transition: width 0.05s linear;
-    box-shadow: 0 0 8px rgba(212, 168, 83, 0.4);
+    box-shadow: 0 0 8px rgba(212, 168, 83, 0.5);
+}
+
+[data-theme='light'] .progressTrack {
+    background: rgba(140, 94, 30, 0.08);
 }
 
 /* ── Logo ── */
@@ -155,6 +159,12 @@
 
 .hamburger.open span:nth-child(3) {
     transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* Hide hamburger lines when menu is fully open — close button handles it */
+.hamburger.open {
+    opacity: 0;
+    pointer-events: none;
 }
 
 /* ── Mobile Menu (Full-screen circular reveal) ── */

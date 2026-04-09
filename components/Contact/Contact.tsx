@@ -4,6 +4,65 @@ import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import styles from './Contact.module.css';
 
+function GravityLine({ text, className }: { text: string; className?: string }) {
+    const containerRef = useRef<HTMLSpanElement>(null);
+    const mouseRef = useRef({ x: 0, y: 0 });
+    const aliveRef = useRef(true);
+
+    useEffect(() => {
+        aliveRef.current = true;
+        const container = containerRef.current;
+        if (!container) return;
+        const chars = container.querySelectorAll<HTMLSpanElement>(`.${styles.gravityChar}`);
+        let rafId: number;
+
+        const animate = () => {
+            // Bail immediately if unmounted or container detached
+            if (!aliveRef.current || !container.isConnected) return;
+            chars.forEach((char) => {
+                if (!char.isConnected) return;
+                const rect = char.getBoundingClientRect();
+                const cx = rect.left + rect.width / 2;
+                const cy = rect.top + rect.height / 2;
+                const dx = mouseRef.current.x - cx;
+                const dy = mouseRef.current.y - cy;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < 180) {
+                    const force = (180 - dist) / 180;
+                    char.style.transform = `translate(${-dx * force * 0.2}px, ${-dy * force * 0.2}px)`;
+                } else {
+                    char.style.transform = 'translate(0,0)';
+                }
+            });
+            rafId = requestAnimationFrame(animate);
+        };
+
+        const onMove = (e: MouseEvent) => { mouseRef.current = { x: e.clientX, y: e.clientY }; };
+        window.addEventListener('mousemove', onMove, { passive: true });
+        rafId = requestAnimationFrame(animate);
+        return () => {
+            aliveRef.current = false;
+            cancelAnimationFrame(rafId);
+            window.removeEventListener('mousemove', onMove);
+        };
+    }, []);
+
+    return (
+        <span ref={containerRef} className={className} style={{ display: 'inline-flex', flexWrap: 'wrap', justifyContent: 'center' }}>
+            {text.split('').map((char, i) => (
+                <span
+                    key={i}
+                    className={styles.gravityChar}
+                    style={{ display: 'inline-block', transition: 'transform 0.3s cubic-bezier(0.16,1,0.3,1)', whiteSpace: char === ' ' ? 'pre' : 'normal' }}
+                >
+                    {char === ' ' ? '\u00A0' : char}
+                </span>
+            ))}
+        </span>
+    );
+}
+
+
 export function Contact() {
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [formState, setFormState] = useState({ name: '', email: '', message: '' });
@@ -78,8 +137,10 @@ export function Contact() {
                             exit={{ opacity: 0, y: -30, scale: 0.95 }}
                             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
                         >
-                            <h2 className={styles.ctaTitle}>
-                                Let&apos;s build<br />something <em>great.</em>
+                            <h2 className={styles.ctaTitle} data-cursor-hover data-cursor-label="Repel ↗">
+                                <GravityLine text="Let's build" />
+                                <br />
+                                <GravityLine text="something " /><GravityLine text="great." className={styles.ctaTitleAccent} />
                             </h2>
                             <p className={styles.ctaText}>
                                 Have a project in mind? I&apos;d love to hear about it. Drop me a line and let&apos;s create something extraordinary together.

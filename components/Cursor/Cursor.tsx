@@ -197,10 +197,6 @@ export function Cursor() {
             const cursorLabel = el.getAttribute('data-cursor-label');
             if (cursorLabel) {
                 setLabel(cursorLabel);
-            } else if (el.tagName === 'A' || el.closest('a')) {
-                setLabel('View');
-            } else if (el.tagName === 'BUTTON' || el.closest('button')) {
-                setLabel('');
             } else {
                 setLabel('');
             }
