@@ -51,21 +51,25 @@ function detectTier(): PerformanceTier {
 }
 
 export function usePerformance() {
-    const [tier, setTier] = useState<PerformanceTier>('high');
+    // Start as null so server and client both render the same "unknown" state
+    // on first paint — avoids React hydration mismatch (error #418).
+    const [tier, setTier] = useState<PerformanceTier | null>(null);
 
     useEffect(() => {
         setTier(detectTier());
     }, []);
 
+    // While tier is null (SSR / first client paint), treat everything as
+    // disabled so server HTML matches the initial client render.
     return {
-        tier,
+        tier: tier ?? 'high',
         isHigh: tier === 'high',
         isMedium: tier === 'medium',
         isLow: tier === 'low',
         enableParticles: tier === 'high',
         enableComplexAnimations: tier === 'high',
         enableMagneticCursor: tier === 'high',
-        enableSmoothScroll: tier !== 'low',
+        enableSmoothScroll: tier !== null && tier !== 'low',
     };
 }
 

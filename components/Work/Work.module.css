@@ -1,8 +1,11 @@
 .section {
     min-height: 100vh;
-    overflow: hidden;
     background: var(--bg2);
     padding: clamp(80px, 10vw, 130px) 0;
+    /* Override global section constraint so GSAP pin works full-width */
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
 }
 
 /* ── Header ── */
@@ -88,9 +91,51 @@
     gap: 36px;
     padding: 0 clamp(28px, 6vw, 80px);
     will-change: transform;
+    width: max-content;
 }
 
-/* ── 3D Tilt Card ── */
+.manualGrid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+    padding: 0 clamp(28px, 6vw, 80px);
+    max-width: 1440px;
+    margin: 0 auto;
+}
+
+.manualCard {
+    width: 100%;
+}
+
+.moreCard {
+    min-height: 520px;
+    border: 1px dashed color-mix(in srgb, var(--accent) 45%, transparent);
+    border-radius: 20px;
+    background:
+        radial-gradient(circle at 20% 20%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 50%),
+        var(--bg);
+    display: grid;
+    place-content: center;
+    text-align: center;
+    gap: 8px;
+}
+
+.moreCount {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.4rem, 5vw, 3.6rem);
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1;
+}
+
+.moreLabel {
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text2);
+}
+
+/* ── Card ── */
 .card {
     --card-color: #d4a853;
     flex-shrink: 0;
@@ -104,24 +149,17 @@
     display: flex;
     flex-direction: column;
     transition: transform 0.5s var(--ease), box-shadow 0.5s var(--ease);
-    transform-style: preserve-3d;
+    will-change: transform;
+    contain: layout paint;
     cursor: none;
 }
 
 .card:hover {
+    transform: translateY(-6px);
     box-shadow: 
         0 24px 64px rgba(0, 0, 0, 0.35),
         0 0 0 1px var(--card-color),
-        0 0 60px color-mix(in srgb, var(--card-color) 15%, transparent);
-}
-
-.tiltGlow {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 3;
-    border-radius: 20px;
-    transition: background 0.2s;
+        0 0 34px color-mix(in srgb, var(--card-color) 12%, transparent);
 }
 
 .cardBorderGlow {
@@ -144,7 +182,7 @@
 }
 
 .card:hover .cardBorderGlow {
-    opacity: 0.4;
+    opacity: 0.28;
     animation: borderRotate 4s linear infinite;
 }
 
@@ -167,7 +205,7 @@
 }
 
 .card:hover .cardImage img {
-    transform: scale(1.08);
+    transform: scale(1.04);
     filter: saturate(1.2);
 }
 
@@ -312,8 +350,11 @@
     opacity: 0;
     transform: scale(0.6) rotate(-45deg);
     transition: all 0.5s var(--ease);
-    z-index: 4;
+    z-index: 10;
     box-shadow: 0 4px 20px color-mix(in srgb, var(--card-color) 40%, transparent);
+    pointer-events: auto;
+    cursor: pointer;
+    text-decoration: none;
 }
 
 .card:hover .cardLink {
@@ -381,25 +422,46 @@
         min-height: auto;
     }
 
+    .header {
+        margin-bottom: 32px;
+    }
+
     .scrollContainer {
-        flex-direction: column;
-        gap: 24px;
+        flex-direction: row;
+        gap: 18px;
+        width: max-content;
+        padding: 0 clamp(16px, 5vw, 24px);
+    }
+
+    .manualGrid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+        padding: 0 clamp(16px, 5vw, 24px);
     }
 
     .card {
-        width: 100%;
+        width: min(88vw, 420px);
         min-height: auto;
+    }
+
+    .manualCard,
+    .moreCard {
+        width: 100%;
+    }
+
+    .moreCard {
+        min-height: 220px;
+    }
+
+    .cardContent {
+        padding: 28px 22px 22px;
+    }
+
+    .cardTitle {
+        font-size: clamp(1.3rem, 5.5vw, 1.55rem);
     }
 
     .cardImage {
         height: 200px;
-    }
-
-    .progress {
-        display: none;
-    }
-
-    .dots {
-        display: none;
     }
 }
