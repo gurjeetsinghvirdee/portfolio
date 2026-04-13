@@ -100,6 +100,9 @@ export function Nav() {
                 <div className={styles.desktopThemeToggle}>
                     <ThemeToggle />
                 </div>
+                <div className={styles.mobileThemeToggle}>
+                    <ThemeToggle />
+                </div>
 
                 {/* Mobile Hamburger */}
                 <button

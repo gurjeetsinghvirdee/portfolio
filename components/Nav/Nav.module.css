@@ -54,6 +54,7 @@
     display: flex;
     align-items: center;
     gap: 4px;
+    white-space: nowrap;
     cursor: none;
 }
 
@@ -110,6 +111,11 @@
 
 .desktopThemeToggle {
     display: inline-flex;
+    align-items: center;
+}
+
+.mobileThemeToggle {
+    display: none;
     align-items: center;
 }
 
@@ -271,8 +277,17 @@
 
 /* ── Responsive ── */
 @media (max-width: 960px) {
+    .nav {
+        justify-content: flex-start;
+    }
+
     .center {
         display: none;
+    }
+
+    .navRight {
+        margin-left: auto;
+        gap: 12px;
     }
 
     .hamburger {
@@ -285,6 +300,11 @@
 
     .desktopThemeToggle {
         display: none;
+    }
+
+    .mobileThemeToggle {
+        display: inline-flex;
+        margin-right: -10px;
     }
 }
 
