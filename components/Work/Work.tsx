@@ -30,6 +30,16 @@ const projects: Project[] = [
     },
     {
         number: '02',
+        category: 'Data Visualization',
+        title: '3D Latency Topology Visualizer',
+        tags: ['Three.js', 'WebGL', 'Recharts', 'Next.js', 'TypeScript'],
+        metric: 'Real-time visualization for 15+ global nodes',
+        url: 'https://latency-topology-visualizer-steel.vercel.app/',
+        color: '#c79a3b',
+        image: '/work/Latency-Topology-Visualizer.png',
+    },
+    {
+        number: '03',
         category: 'AI Tool',
         title: 'Debate AI - An AI-Powered Debate Platform',
         tags: ['Next.js', 'Anthropic API', 'Supabase', 'Tailwind'],
@@ -39,7 +49,7 @@ const projects: Project[] = [
         image: '/work/DebateAI.png',
     },
     {
-        number: '03',
+        number: '04',
         category: 'Demo Project',
         title: 'Innovation Hub',
         tags: ['HTML 5', 'CSS 3', 'JavaScript'],
