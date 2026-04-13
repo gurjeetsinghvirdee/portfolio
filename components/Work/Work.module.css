@@ -90,49 +90,17 @@
     display: flex;
     gap: 36px;
     padding: 0 clamp(28px, 6vw, 80px);
-    will-change: transform;
-    width: max-content;
-}
-
-.manualGrid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 24px;
-    padding: 0 clamp(28px, 6vw, 80px);
-    max-width: 1440px;
-    margin: 0 auto;
-}
-
-.manualCard {
     width: 100%;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 50%;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
 }
 
-.moreCard {
-    min-height: 520px;
-    border: 1px dashed color-mix(in srgb, var(--accent) 45%, transparent);
-    border-radius: 20px;
-    background:
-        radial-gradient(circle at 20% 20%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 50%),
-        var(--bg);
-    display: grid;
-    place-content: center;
-    text-align: center;
-    gap: 8px;
-}
-
-.moreCount {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(2.4rem, 5vw, 3.6rem);
-    font-weight: 800;
-    color: var(--accent);
-    line-height: 1;
-}
-
-.moreLabel {
-    font-size: 0.7rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--text2);
+.scrollContainer::-webkit-scrollbar {
+    display: none;
 }
 
 /* ── Card ── */
@@ -152,6 +120,7 @@
     will-change: transform;
     contain: layout paint;
     cursor: none;
+    scroll-snap-align: center;
 }
 
 .card:hover {
@@ -204,7 +173,19 @@
     filter: saturate(0.8);
 }
 
+.projectImage {
+    object-fit: cover;
+    object-position: top;
+    transition: transform 0.8s var(--ease), filter 0.5s;
+    filter: saturate(0.8);
+}
+
 .card:hover .cardImage img {
+    transform: scale(1.04);
+    filter: saturate(1.2);
+}
+
+.card:hover .projectImage {
     transform: scale(1.04);
     filter: saturate(1.2);
 }
@@ -362,6 +343,36 @@
     transform: scale(1) rotate(0);
 }
 
+.navButtons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.navButton {
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    color: var(--text);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition: all 0.28s var(--ease);
+}
+
+.navButton:hover:not(:disabled) {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-1px);
+}
+
+.navButton:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
 /* ── Dots navigation ── */
 .dots {
     display: flex;
@@ -429,13 +440,7 @@
     .scrollContainer {
         flex-direction: row;
         gap: 18px;
-        width: max-content;
-        padding: 0 clamp(16px, 5vw, 24px);
-    }
-
-    .manualGrid {
-        grid-template-columns: 1fr;
-        gap: 18px;
+        width: 100%;
         padding: 0 clamp(16px, 5vw, 24px);
     }
 
@@ -444,13 +449,13 @@
         min-height: auto;
     }
 
-    .manualCard,
-    .moreCard {
-        width: 100%;
+    .headerRight {
+        gap: 12px;
     }
 
-    .moreCard {
-        min-height: 220px;
+    .navButton {
+        width: 30px;
+        height: 30px;
     }
 
     .cardContent {

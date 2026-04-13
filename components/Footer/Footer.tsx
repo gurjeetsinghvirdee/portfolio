@@ -49,13 +49,6 @@ export function Footer() {
                     </div>
                 </div>
 
-                <nav className={styles.navLinks}>
-                    <a href="#work">Work</a>
-                    <a href="#about">About</a>
-                    <a href="#services">Services</a>
-                    <a href="#contact">Contact</a>
-                </nav>
-
                 <div className={styles.right}>
                     <div className={styles.socials}>
                         <a

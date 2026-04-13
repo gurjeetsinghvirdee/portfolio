@@ -14,8 +14,8 @@ export function Nav() {
 
     const navItems = [
         { title: 'Work', href: '#work', desc: 'Selected builds' },
+        { title: 'Experience', href: '#experience', desc: 'Career timeline' },
         { title: 'About', href: '#about', desc: 'Journey & approach' },
-        { title: 'Services', href: '#services', desc: 'What I offer' },
         { title: 'Contact', href: '#contact', desc: 'Start a conversation' },
     ];
 
@@ -29,7 +29,7 @@ export function Nav() {
             setScrollProgress(progress);
 
             // Active section detection
-            const sections = ['hero', 'work', 'about', 'services', 'contact'];
+            const sections = ['hero', 'work', 'experience', 'about', 'contact'];
             const scrollPos = window.scrollY + window.innerHeight / 3;
 
             for (let i = sections.length - 1; i >= 0; i--) {
@@ -97,7 +97,9 @@ export function Nav() {
                 <a href="#contact" className={styles.cta} data-cursor-hover data-cursor-label="Hire">
                     Hire Me
                 </a>
-                <ThemeToggle />
+                <div className={styles.desktopThemeToggle}>
+                    <ThemeToggle />
+                </div>
 
                 {/* Mobile Hamburger */}
                 <button

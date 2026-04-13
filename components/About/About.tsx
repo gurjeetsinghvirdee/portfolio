@@ -14,7 +14,9 @@ const stats = [
 
 const skills = [
     'React', 'Next.js', 'TypeScript', 'Node.js', 'PostgreSQL',
-    'Framer Motion', 'Three.js', 'Tailwind', 'Docker', 'AI Integration'
+    'Framer Motion', 'Three.js', 'Tailwind', 'Docker', 'AI Integration',
+    'React Query', 'Zustand', 'Web Workers', 'GSAP', 'GraphQL',
+    'REST APIs', 'Prisma', 'Vercel', 'Jest', 'Cypress'
 ];
 
 function AnimatedCounter({ value, suffix, display }: { value: number; suffix: string; display?: string }) {

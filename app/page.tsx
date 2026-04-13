@@ -6,8 +6,8 @@ import { Hero } from '@/components/Hero/Hero';
 import { Nav } from '@/components/Nav/Nav';
 import { Marquee } from '@/components/Marquee/Marquee';
 import { Work } from '@/components/Work/Work';
+import { Experience } from '@/components/Experience/Experience';
 import { About } from '@/components/About/About';
-import { Services } from '@/components/Services/Services';
 import { Contact } from '@/components/Contact/Contact';
 import { Footer } from '@/components/Footer/Footer';
 import { SectionDivider } from '@/components/SectionDivider/SectionDivider';
@@ -33,9 +33,9 @@ export default function Page() {
             <SectionDivider />
             <Work />
             <SectionDivider />
-            <About />
+            <Experience />
             <SectionDivider />
-            <Services />
+            <About />
             <SectionDivider />
             <Contact />
             <Footer />

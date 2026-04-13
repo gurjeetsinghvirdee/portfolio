@@ -1,8 +1,9 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { HiArrowUpRight } from 'react-icons/hi2';
+import { HiArrowUpRight, HiChevronLeft, HiChevronRight } from 'react-icons/hi2';
 import styles from './Work.module.css';
 
 type Project = {
@@ -13,38 +14,8 @@ type Project = {
     metric: string;
     url: string;
     color: string;
+    image: string;
 };
-
-function LivePreview({ url, color, shouldLoad }: { url: string; color: string; shouldLoad: boolean }) {
-    const [loaded, setLoaded] = useState(false);
-    const [hasMounted, setHasMounted] = useState(false);
-
-    useEffect(() => {
-        if (shouldLoad) setHasMounted(true);
-    }, [shouldLoad]);
-
-    return (
-        <div className={styles.iframeWrapper}>
-            {!loaded && (
-                <div className={styles.iframeLoader} style={{ '--card-color': color } as React.CSSProperties}>
-                    <div className={styles.iframeSpinner} />
-                    <span>Loading preview…</span>
-                </div>
-            )}
-            {hasMounted && (
-                <iframe
-                    src={url}
-                    title="Project Preview"
-                    className={styles.iframe}
-                    onLoad={() => setLoaded(true)}
-                    sandbox="allow-scripts allow-same-origin"
-                    loading="lazy"
-                    scrolling="no"
-                />
-            )}
-        </div>
-    );
-}
 
 const projects: Project[] = [
     {
@@ -55,49 +26,51 @@ const projects: Project[] = [
         metric: 'Reduced file processing time by 80%',
         url: 'https://usemediakit.app/',
         color: '#d4a853',
+        image: '/work/MediaKit.png',
     },
     {
         number: '02',
-        category: 'Data Visualization',
-        title: '3D Latency Topology Visualizer',
-        tags: ['Three.js', 'WebGL', 'Recharts', 'Next.js', 'TypeScript'],
-        metric: 'Real-time visualization for 15+ global nodes',
-        url: 'https://latency-topology-visualizer-steel.vercel.app/',
-        color: '#c79a3b',
-    },
-    {
-        number: '03',
         category: 'AI Tool',
         title: 'Debate AI - An AI-Powered Debate Platform',
         tags: ['Next.js', 'Anthropic API', 'Supabase', 'Tailwind'],
         metric: '90% user satisfaction in beta testing',
         url: 'https://debate-ai-eta.vercel.app/',
         color: '#b8872d',
+        image: '/work/DebateAI.png',
+    },
+    {
+        number: '03',
+        category: 'Demo Project',
+        title: 'Innovation Hub',
+        tags: ['HTML 5', 'CSS 3', 'JavaScript'],
+        metric: 'Built as a showcase demo for presentation purposes',
+        url: 'https://gurjeetsinghvirdee.github.io/innovation-hub/',
+        color: '#b8872d',
+        image: '/work/School-Innovation-Portal.png',
     },
 ];
 
 export function Work() {
-    const sectionRef = useRef<HTMLElement>(null);
     const scrollRef = useRef<HTMLDivElement>(null);
     const [activeIndex, setActiveIndex] = useState(0);
-    const activeIndexRef = useRef(0);
-    const isManualView = projects.length > 3;
-    const maxVisibleManual = projects.length > 5 ? 5 : 4;
-    const visibleManualProjects = projects.slice(0, maxVisibleManual);
-    const remainingProjects = Math.max(projects.length - maxVisibleManual, 0);
+    const [canScrollLeft, setCanScrollLeft] = useState(false);
+    const [canScrollRight, setCanScrollRight] = useState(projects.length > 1);
 
-    const renderProjectCard = (project: Project, shouldLoad: boolean, key: string | number) => (
+    const renderProjectCard = (project: Project, key: string | number) => (
         <div
             key={key}
-            className={`${styles.card} ${isManualView ? styles.manualCard : ''}`}
+            className={styles.card}
             data-cursor-hover
             style={{ '--card-color': project.color } as React.CSSProperties}
         >
             <div className={styles.cardImage}>
-                <LivePreview
-                    url={project.url}
-                    color={project.color}
-                    shouldLoad={shouldLoad}
+                <Image
+                    src={project.image}
+                    alt={`${project.title} preview`}
+                    fill
+                    sizes="(max-width: 960px) 88vw, 520px"
+                    loading="lazy"
+                    className={styles.projectImage}
                 />
             </div>
             <div className={styles.cardContent}>
@@ -128,87 +101,87 @@ export function Work() {
         </div>
     );
 
-    // Horizontal scroll pinning with GSAP
+    const scrollToIndex = useCallback((index: number, behavior: ScrollBehavior = 'smooth') => {
+        const container = scrollRef.current;
+        if (!container) return;
+
+        const cards = Array.from(container.querySelectorAll(`.${styles.card}`)) as HTMLDivElement[];
+        if (cards.length === 0) return;
+
+        const safeIndex = Math.max(0, Math.min(index, cards.length - 1));
+        const card = cards[safeIndex];
+        const left = card.offsetLeft - (container.clientWidth - card.clientWidth) / 2;
+
+        container.scrollTo({
+            left: Math.max(0, left),
+            behavior,
+        });
+    }, []);
+
     useEffect(() => {
-        if (isManualView) {
-            return;
-        }
+        const container = scrollRef.current;
+        if (!container) return;
 
-        let ctx: ReturnType<typeof import('gsap').gsap.context> | undefined;
-        let isActive = true;
-        let resizeObserver: ResizeObserver | null = null;
+        const updateState = () => {
+            const maxScrollLeft = container.scrollWidth - container.clientWidth;
+            const left = container.scrollLeft;
+            const edgeThreshold = 8;
 
-        const setup = async () => {
-            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            setCanScrollLeft(left > 4);
+            setCanScrollRight(left < maxScrollLeft - 4);
+
+            const cards = Array.from(container.querySelectorAll(`.${styles.card}`)) as HTMLDivElement[];
+            if (cards.length <= 1) {
+                setActiveIndex(0);
                 return;
             }
 
-            const { gsap, ScrollTrigger } = await import('@/lib/smooth-scroll');
-            if (!isActive) return;
-
-            const section = sectionRef.current;
-            const scroll = scrollRef.current;
-            if (!section || !scroll) return;
-
-            ctx = gsap.context(() => {
-                const cards = scroll.querySelectorAll(`.${styles.card}`);
-                const totalScroll = Math.max(scroll.scrollWidth - section.offsetWidth, 0);
-                if (totalScroll <= 0) return;
-
-                gsap.to(scroll, {
-                    x: -totalScroll,
-                    ease: 'none',
-                    scrollTrigger: {
-                        trigger: section,
-                        start: 'top top',
-                        end: () => `+=${totalScroll}`,
-                        scrub: 1,
-                        pin: true,
-                        anticipatePin: 1,
-                        invalidateOnRefresh: true,
-                        onUpdate: (self) => {
-                            const idx = Math.min(
-                                Math.floor(self.progress * cards.length),
-                                cards.length - 1
-                            );
-                            if (idx !== activeIndexRef.current) {
-                                activeIndexRef.current = idx;
-                                setActiveIndex(idx);
-                            }
-                        },
-                    },
-                });
-            }, section);
-
-            resizeObserver = new ResizeObserver(() => {
-                ScrollTrigger.refresh();
-            });
-            resizeObserver.observe(section);
-            resizeObserver.observe(scroll);
-
-            // Delay refresh so layout is fully settled
-            setTimeout(() => ScrollTrigger.refresh(), 200);
-
-            // Guard against StrictMode effect teardown racing async setup.
-            if (!isActive) {
-                ctx?.revert();
-                ScrollTrigger.refresh();
+            // Keep count stable at the edges where center alignment is not physically reachable.
+            if (left <= edgeThreshold) {
+                setActiveIndex(0);
+                return;
             }
+
+            if (left >= maxScrollLeft - edgeThreshold) {
+                setActiveIndex(cards.length - 1);
+                return;
+            }
+
+            const viewportCenter = left + container.clientWidth / 2;
+            let nextIndex = 0;
+            let smallestDistance = Number.POSITIVE_INFINITY;
+
+            cards.forEach((card, idx) => {
+                const cardCenter = card.offsetLeft + card.clientWidth / 2;
+                const distance = Math.abs(cardCenter - viewportCenter);
+                if (distance < smallestDistance) {
+                    smallestDistance = distance;
+                    nextIndex = idx;
+                }
+            });
+
+            setActiveIndex(nextIndex);
         };
 
-        setup().catch((error) => {
-            console.error('Failed to initialize Work scroll animation', error);
-        });
+        setActiveIndex(0);
+        scrollToIndex(0, 'auto');
+        updateState();
+        container.addEventListener('scroll', updateState, { passive: true });
+        window.addEventListener('resize', updateState);
 
         return () => {
-            isActive = false;
-            resizeObserver?.disconnect();
-            ctx?.revert();
+            container.removeEventListener('scroll', updateState);
+            window.removeEventListener('resize', updateState);
         };
-    }, [isManualView]);
+    }, [scrollToIndex]);
+
+    const handleScrollByCard = (direction: 'left' | 'right') => {
+        const targetIndex = direction === 'left' ? activeIndex - 1 : activeIndex + 1;
+        scrollToIndex(targetIndex);
+    };
 
     return (
-        <section id="work" ref={sectionRef} className={styles.section}>
+        <section id="work" className={styles.section}>
             <div className={styles.header}>
                 <div>
                     <motion.div
@@ -230,43 +203,48 @@ export function Work() {
                     </motion.h2>
                 </div>
                 <div className={styles.headerRight}>
-                    {!isManualView && (
-                        <div className={styles.progress}>
-                            <span className={styles.progressCurrent}>{String(activeIndex + 1).padStart(2, '0')}</span>
-                            <span className={styles.progressSep}>/</span>
-                            <span className={styles.progressTotal}>{String(projects.length).padStart(2, '0')}</span>
-                        </div>
-                    )}
+                    <div className={styles.progress}>
+                        <span className={styles.progressCurrent}>{String(activeIndex + 1).padStart(2, '0')}</span>
+                        <span className={styles.progressSep}>/</span>
+                        <span className={styles.progressTotal}>{String(projects.length).padStart(2, '0')}</span>
+                    </div>
+                    <div className={styles.navButtons}>
+                        <button
+                            type="button"
+                            className={styles.navButton}
+                            aria-label="Scroll projects left"
+                            onClick={() => handleScrollByCard('left')}
+                            disabled={!canScrollLeft}
+                        >
+                            <HiChevronLeft />
+                        </button>
+                        <button
+                            type="button"
+                            className={styles.navButton}
+                            aria-label="Scroll projects right"
+                            onClick={() => handleScrollByCard('right')}
+                            disabled={!canScrollRight}
+                        >
+                            <HiChevronRight />
+                        </button>
+                    </div>
                 </div>
             </div>
 
-            {isManualView ? (
-                <div className={styles.manualGrid}>
-                    {visibleManualProjects.map((project) => renderProjectCard(project, true, project.title))}
-
-                    {remainingProjects > 0 && (
-                        <div className={styles.moreCard}>
-                            <div className={styles.moreCount}>+{remainingProjects}</div>
-                            <div className={styles.moreLabel}>More Projects</div>
-                        </div>
-                    )}
+            <>
+                <div className={styles.scrollContainer} ref={scrollRef}>
+                    {projects.map((project, i) => renderProjectCard(project, i))}
                 </div>
-            ) : (
-                <>
-                    <div className={styles.scrollContainer} ref={scrollRef}>
-                        {projects.map((project, i) => renderProjectCard(project, Math.abs(i - activeIndex) <= 1, i))}
-                    </div>
 
-                    <div className={styles.dots}>
-                        {projects.map((_, i) => (
-                            <span
-                                key={i}
-                                className={`${styles.dot} ${i === activeIndex ? styles.dotActive : ''}`}
-                            />
-                        ))}
-                    </div>
-                </>
-            )}
+                <div className={styles.dots}>
+                    {projects.map((_, i) => (
+                        <span
+                            key={i}
+                            className={`${styles.dot} ${i === activeIndex ? styles.dotActive : ''}`}
+                        />
+                    ))}
+                </div>
+            </>
         </section>
     );
 }
