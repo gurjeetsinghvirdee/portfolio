@@ -81,7 +81,7 @@ export function Hero() {
         };
     }, [enableComplexAnimations]);
 
-    // Mouse parallax
+    // Mouse parallax — paused when off-screen
     useEffect(() => {
         if (!enableComplexAnimations) return;
 
@@ -89,6 +89,7 @@ export function Hero() {
         if (!section) return;
 
         let rafId = 0;
+        let running = false;
         let currentX = window.innerWidth * 0.5;
         let currentY = window.innerHeight * 0.3;
         let targetX = currentX;
@@ -99,6 +100,7 @@ export function Hero() {
         };
 
         const paint = () => {
+            if (!running) return;
             currentX += (targetX - currentX) * 0.16;
             currentY += (targetY - currentY) * 0.16;
 
@@ -123,6 +125,16 @@ export function Hero() {
             targetY = window.innerHeight * 0.3;
         };
 
+        const io = new IntersectionObserver(
+            ([entry]) => {
+                running = entry.isIntersecting;
+                if (running) rafId = requestAnimationFrame(paint);
+                else cancelAnimationFrame(rafId);
+            },
+            { threshold: 0 }
+        );
+        io.observe(section);
+
         section.style.setProperty('--mouse-x', `${currentX}px`);
         section.style.setProperty('--mouse-y', `${currentY}px`);
         section.style.setProperty('--parallax-x', '0px');
@@ -134,10 +146,9 @@ export function Hero() {
         window.addEventListener('scroll', handleScroll, { passive: true });
         section.addEventListener('mouseleave', handleLeave);
 
-        rafId = requestAnimationFrame(paint);
-
         return () => {
             cancelAnimationFrame(rafId);
+            io.disconnect();
             window.removeEventListener('mousemove', handleMove);
             window.removeEventListener('scroll', handleScroll);
             section.removeEventListener('mouseleave', handleLeave);

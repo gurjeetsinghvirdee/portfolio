@@ -89,14 +89,21 @@ export function Cursor() {
             prevMouseRef.current = { ...mouseRef.current };
         };
 
-        const drawParticles = () => {
-            const canvas = canvasRef.current;
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            if (!ctx) return;
+        const canvas = canvasRef.current;
+        const ctx = canvas?.getContext('2d');
+        if (!canvas || !ctx) return;
 
+        // Size canvas once; update only on resize (not every frame)
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const handleCanvasResize = () => {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
+        };
+        window.addEventListener('resize', handleCanvasResize, { passive: true });
+
+        const drawParticles = () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             particlesRef.current = particlesRef.current.filter(p => p.life > 0);
@@ -110,24 +117,19 @@ export function Cursor() {
                 const alpha = p.life * 0.7;
                 const size = p.size * p.life;
 
-                if (!Number.isFinite(p.x) || !Number.isFinite(p.y)) {
-                    continue;
-                }
-
+                if (!Number.isFinite(p.x) || !Number.isFinite(p.y)) continue;
                 const radius = Number.isFinite(size) && size > 0 ? size : 0;
-                if (radius === 0) {
-                    continue;
-                }
+                if (radius === 0) continue;
 
+                // Use opacity-scaled alpha for depth instead of expensive ctx.filter blur
                 ctx.beginPath();
                 ctx.arc(p.x, p.y, radius, 0, Math.PI * 2);
                 ctx.fillStyle = `rgba(212, 168, 83, ${alpha})`;
                 ctx.fill();
 
-                // Glow
                 ctx.beginPath();
                 ctx.arc(p.x, p.y, radius * 2.5, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(212, 168, 83, ${alpha * 0.15})`;
+                ctx.fillStyle = `rgba(212, 168, 83, ${alpha * 0.12})`;
                 ctx.fill();
             }
         };
@@ -236,6 +238,7 @@ export function Cursor() {
             document.removeEventListener('mousemove', handleMouseMove);
             document.removeEventListener('mousedown', handleMouseDown);
             document.removeEventListener('mouseup', handleMouseUp);
+            window.removeEventListener('resize', handleCanvasResize);
             const els = document.querySelectorAll('a, button, [data-cursor-hover]');
             els.forEach(el => {
                 el.removeEventListener('mouseenter', addHover);

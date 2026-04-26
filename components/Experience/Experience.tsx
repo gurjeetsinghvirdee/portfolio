@@ -48,6 +48,15 @@ const experiences: ExperienceItem[] = [
         ],
     },
     {
+        role: 'Data Analyst - Chhattisgarh Forest Department',
+        period: 'Sep 2025 - Nov 2025',
+        icon: HiChartBarSquare,
+        points: [
+            'Processed and structured 2000+ survey records, transforming raw field data into usable datasets.',
+            'Improved data organization for analysis and reporting workflows.',
+        ],
+    },
+    {
         role: 'Frontend Code Reviewer & QA Specialist - Outlier',
         period: 'Oct 2024 - Feb 2025',
         icon: HiShieldCheck,
@@ -55,15 +64,6 @@ const experiences: ExperienceItem[] = [
             'Optimized conversation interfaces, improving clarity and interaction flow for 10K+ users.',
             'Refined UI text hierarchy and layouts, increasing engagement and task completion rates.',
             'Worked closely with product/design teams to enhance usability and UX consistency.',
-        ],
-    },
-    {
-        role: 'Data Analyst - Chhattisgarh Forest Department',
-        period: 'Sep 2025 - Nov 2025',
-        icon: HiChartBarSquare,
-        points: [
-            'Processed and structured 2000+ survey records, transforming raw field data into usable datasets.',
-            'Improved data organization for analysis and reporting workflows.',
         ],
     },
     {

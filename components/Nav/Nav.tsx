@@ -14,7 +14,9 @@ export function Nav() {
 
     const navItems = [
         { title: 'Work', href: '#work', desc: 'Selected builds' },
+        { title: 'Services', href: '#services', desc: 'What I offer' },
         { title: 'Experience', href: '#experience', desc: 'Career timeline' },
+        { title: 'Story', href: '#story', desc: 'The first product' },
         { title: 'About', href: '#about', desc: 'Journey & approach' },
         { title: 'Contact', href: '#contact', desc: 'Start a conversation' },
     ];
@@ -29,7 +31,7 @@ export function Nav() {
             setScrollProgress(progress);
 
             // Active section detection
-            const sections = ['hero', 'work', 'experience', 'about', 'contact'];
+            const sections = ['hero', 'work', 'services', 'experience', 'story', 'about', 'contact'];
             const scrollPos = window.scrollY + window.innerHeight / 3;
 
             for (let i = sections.length - 1; i >= 0; i--) {

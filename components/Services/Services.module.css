@@ -1,14 +1,43 @@
 .section {
+    position: relative;
+    overflow: hidden;
     background: var(--bg2);
-    transition: background .5s;
     padding: clamp(80px, 10vw, 130px) clamp(28px, 6vw, 80px);
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+/* ── Background ── */
+.bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.bgGlow {
+    position: absolute;
+    top: -20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70%;
+    height: 60%;
+    background: radial-gradient(ellipse at center, rgba(212, 168, 83, 0.06) 0%, transparent 70%);
+    filter: blur(40px);
+}
+
+/* ── Header ── */
+.header {
+    position: relative;
+    z-index: 1;
     max-width: 1440px;
-    margin: 0 auto;
+    margin: 0 auto 72px;
 }
 
 .eyebrow {
-    font-size: .62rem;
-    letter-spacing: .3em;
+    font-size: 0.62rem;
+    letter-spacing: 0.3em;
     text-transform: uppercase;
     color: var(--accent);
     margin-bottom: 14px;
@@ -26,179 +55,145 @@
 
 .title {
     font-family: 'Instrument Serif', serif;
-    font-size: clamp(2.4rem, 4.5vw, 4.5rem);
+    font-size: clamp(2.6rem, 5vw, 4.8rem);
     font-weight: 400;
     line-height: 1.05;
     color: var(--text);
+    margin-bottom: 20px;
 }
 
 .title em {
-    font-style: italic;
     color: var(--accent);
+    font-style: italic;
 }
 
-/* ── Service list ── */
-.list {
-    margin-top: 72px;
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
+.subtitle {
+    font-size: 1rem;
+    color: var(--text3);
+    line-height: 1.8;
+    max-width: 540px;
+}
+
+/* ── Grid ── */
+.grid {
+    position: relative;
+    z-index: 1;
+    max-width: 1440px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2px;
     background: var(--border);
-    border: 1px solid var(--border);
-    border-radius: 16px;
+    border-radius: 20px;
     overflow: hidden;
 }
 
-.item {
-    --holo-x: 50%;
-    --holo-y: 50%;
+/* ── Card ── */
+.card {
     position: relative;
     background: var(--bg);
+    padding: 48px 44px;
     cursor: none;
+    transition: background 0.4s var(--ease);
     overflow: hidden;
-    transition: background .3s var(--ease);
 }
 
-.item:hover {
-    background: var(--bg2);
+.card:hover {
+    background: var(--bg3);
 }
 
-.itemActive {
-    background: var(--bg2);
-}
-
-/* ── Holographic shine ── */
-.holoShine {
+.cardLine {
     position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    background: radial-gradient(
-        300px circle at var(--holo-x) var(--holo-y),
-        rgba(212, 168, 83, 0.08) 0%,
-        rgba(100, 200, 255, 0.03) 30%,
-        rgba(168, 85, 247, 0.03) 60%,
-        transparent 80%
-    );
+    bottom: 0;
+    left: 44px;
+    right: 44px;
+    height: 1px;
+    background: linear-gradient(to right, var(--accent), transparent);
     opacity: 0;
-    transition: opacity 0.4s;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
 }
 
-.item:hover .holoShine {
-    opacity: 1;
+.card:hover .cardLine {
+    opacity: 0.5;
+    transform: scaleX(1);
 }
 
-/* ── Inner layout ── */
-.itemInner {
-    position: relative;
-    display: grid;
-    grid-template-columns: 60px 1fr auto auto;
-    gap: 24px;
-    align-items: center;
-    padding: 28px 36px;
-    z-index: 1;
-}
-
-.num {
-    font-family: 'Syne', sans-serif;
-    font-weight: 800;
-    font-size: 1.1rem;
-    background: linear-gradient(135deg, #d4a853 0%, #c0c0c0 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    opacity: .6;
-    transition: opacity 0.3s;
-    min-width: 32px;
-}
-
-.item:hover .num {
-    opacity: 1;
-}
-
-.content {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    overflow: hidden;
-}
-
-.nameRow {
+/* ── Card top row ── */
+.cardTop {
     display: flex;
     align-items: center;
-    gap: 14px;
+    justify-content: space-between;
+    margin-bottom: 28px;
 }
 
-.serviceIcon {
-    font-size: 1.2rem;
-    opacity: 0;
-    transform: scale(0.5);
-    transition: all 0.4s var(--ease);
-}
-
-.item:hover .serviceIcon {
-    opacity: 1;
-    transform: scale(1);
-}
-
-.name {
-    font-family: 'Instrument Serif', serif;
-    font-weight: 400;
-    font-size: 1.7rem;
-    color: var(--text);
-    transition: color 0.3s;
-}
-
-.item:hover .name {
+.icon {
+    font-size: 1.8rem;
     color: var(--accent);
+    line-height: 1;
+    font-style: normal;
 }
 
-.description {
-    font-size: .78rem;
+.number {
+    font-family: 'Syne', sans-serif;
+    font-size: 4rem;
+    font-weight: 800;
+    color: rgba(212, 168, 83, 0.07);
+    line-height: 1;
+}
+
+/* ── Card body ── */
+.cardTitle {
+    font-family: 'Instrument Serif', serif;
+    font-size: 1.55rem;
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--text);
+    margin-bottom: 16px;
+}
+
+.cardDesc {
+    font-size: 0.88rem;
     line-height: 1.85;
     color: var(--text2);
-    max-width: 680px;
-    overflow: hidden;
+    margin-bottom: 32px;
 }
 
-/* ── Toggle/Arrow icons ── */
-.toggleIcon {
-    color: var(--accent);
-    font-size: 1rem;
-    padding: 8px;
-    opacity: 0.6;
-    transition: all 0.3s var(--ease);
+/* ── Deliverables ── */
+.deliverables {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
-.item:hover .toggleIcon {
-    opacity: 1;
+.deliverable {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text3);
+    transition: color 0.3s var(--ease);
 }
 
-.arrow {
-    color: var(--accent);
-    font-size: 1.3rem;
-    padding: 8px;
-    opacity: 0;
-    transform: translateX(-10px);
-    transition: opacity .3s, transform .3s var(--ease);
+.card:hover .deliverable {
+    color: var(--text2);
 }
 
-.item:hover .arrow {
-    opacity: 1;
-    transform: translateX(0);
+.deliverableDot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+    opacity: 0.5;
+    transition: opacity 0.3s var(--ease);
 }
 
-/* ── Glow ── */
-.itemGlow {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(90deg, rgba(212, 168, 83, 0.06) 0%, transparent 60%);
-    opacity: 0;
-    transition: opacity .3s;
-    pointer-events: none;
-}
-
-.item:hover .itemGlow {
+.card:hover .deliverableDot {
     opacity: 1;
 }
 
@@ -207,34 +202,25 @@
     background: #f3efe7;
 }
 
-[data-theme='light'] .item {
+[data-theme='light'] .card {
     background: #fffaf2;
 }
 
-[data-theme='light'] .item:hover,
-[data-theme='light'] .itemActive {
-    background: #f5eee0;
+[data-theme='light'] .card:hover {
+    background: #f9f4e9;
 }
 
 /* ── Mobile ── */
-@media (max-width: 960px) {
-    .itemInner {
-        grid-template-columns: 44px 1fr auto;
-        gap: 16px;
-        padding: 24px 20px;
+@media (max-width: 860px) {
+    .grid {
+        grid-template-columns: 1fr;
     }
 
-    .arrow {
-        display: none;
+    .card {
+        padding: 36px 28px;
     }
 
-    .name {
-        font-size: 1.3rem;
-    }
-
-    .serviceIcon {
-        opacity: 1;
-        transform: scale(1);
-        font-size: 1rem;
+    .cardTitle {
+        font-size: 1.35rem;
     }
 }

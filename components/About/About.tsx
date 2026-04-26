@@ -55,18 +55,20 @@ export function About() {
     const sectionRef = useRef<HTMLElement>(null);
     const imageRef = useRef<HTMLDivElement>(null);
 
-    // Mouse parallax for background
+    // Mouse parallax for background — paused when off-screen
     useEffect(() => {
         const section = sectionRef.current;
         if (!section) return;
 
         let rafId = 0;
+        let running = false;
         let currentX = window.innerWidth * 0.5;
         let currentY = window.innerHeight * 0.35;
         let targetX = currentX;
         let targetY = currentY;
 
         const paint = () => {
+            if (!running) return;
             currentX += (targetX - currentX) * 0.14;
             currentY += (targetY - currentY) * 0.14;
             section.style.setProperty('--about-mouse-x', `${currentX}px`);
@@ -84,14 +86,24 @@ export function About() {
             targetY = window.innerHeight * 0.35;
         };
 
+        const io = new IntersectionObserver(
+            ([entry]) => {
+                running = entry.isIntersecting;
+                if (running) rafId = requestAnimationFrame(paint);
+                else cancelAnimationFrame(rafId);
+            },
+            { threshold: 0 }
+        );
+        io.observe(section);
+
         section.style.setProperty('--about-mouse-x', `${currentX}px`);
         section.style.setProperty('--about-mouse-y', `${currentY}px`);
         window.addEventListener('mousemove', onMove, { passive: true });
         section.addEventListener('mouseleave', onLeave);
-        rafId = requestAnimationFrame(paint);
 
         return () => {
             cancelAnimationFrame(rafId);
+            io.disconnect();
             window.removeEventListener('mousemove', onMove);
             section.removeEventListener('mouseleave', onLeave);
         };

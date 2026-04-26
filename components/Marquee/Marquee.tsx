@@ -8,10 +8,14 @@ export function Marquee() {
     const track1Ref = useRef<HTMLDivElement>(null);
     const track2Ref = useRef<HTMLDivElement>(null);
 
-    const items = [
-        'System Design', 'UI / UX', 'Web Performance', 'Scalable Systems', 'AI Integration',
-        'Data Visualization', 'Developer Experience', 'Product Engineering', 'API Architecture',
-        'Real-Time Systems', 'Interactive Graphics', 'Performance Engineering'
+    const row1 = [
+        'React & Next.js', 'Three.js & WebGL', 'Node.js APIs', 'TypeScript',
+        'Data Visualization', 'AI Integration', 'Performance Engineering', 'Real-Time Systems',
+    ];
+
+    const row2 = [
+        'Problem-First Thinking', 'Clean Architecture', 'Pixel-Perfect UI', 'Accessible Design',
+        'Fast Iteration', 'Scalable Systems', 'Developer Experience', 'Shipped Products',
     ];
 
     // Scroll-speed reactive marquee
@@ -69,7 +73,7 @@ export function Marquee() {
         <div className={styles.wrap} ref={wrapRef}>
             <div className={styles.row}>
                 <div className={styles.track} ref={track1Ref}>
-                    {[...items, ...items].map((item, i) => (
+                    {[...row1, ...row1].map((item, i) => (
                         <span key={i} className={styles.item} data-cursor-hover>
                             {item} <span className={styles.sep}>✦</span>
                         </span>
@@ -78,7 +82,7 @@ export function Marquee() {
             </div>
             <div className={styles.row}>
                 <div className={`${styles.track} ${styles.reverse}`} ref={track2Ref}>
-                    {[...items.slice().reverse(), ...items.slice().reverse()].map((item, i) => (
+                    {[...row2, ...row2].map((item, i) => (
                         <span key={i} className={styles.item} data-cursor-hover>
                             {item} <span className={styles.sep}>◆</span>
                         </span>
